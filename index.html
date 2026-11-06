@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PEKES — Para la vida que comparten | Gimnasios y Catálogo Felino Cali</title>
+  <meta name="description" content="Catálogo exclusivo de gimnasios de piso y pared para gatos en Cali. Diseños contemporáneos, bienestar y conexión. Consulta y compra directa vía WhatsApp." />
+  <link rel="icon" type="image/png" href="/images/logos/mascota.png" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Barra de Control y Auditoría Técnica para PEKES
+       ========================================================================== -->
+  <aside class="admin-bar" aria-label="Panel de Simulación para PEKES">
+    <div class="admin-bar-info">
+      <span class="admin-pill">BACKEND PYTHON + SQLITE</span>
+      <span>Catálogo PEKES Autónomo</span>
+      <a href="http://localhost:5001/admin" target="_blank" style="background: var(--color-brand-violet); color: white; padding: 0.2rem 0.7rem; border-radius: 9999px; font-weight: 700; font-size: 0.75rem; margin-left: 0.5rem; display: inline-flex; align-items: center; gap: 0.3rem;">
+        ⚙️ Abrir Panel Admin Python ↗
+      </a>
+    </div>
+    <div class="admin-controls">
+      <label class="toggle-label" title="Simula el comportamiento estipulado en la Regla 6.2 (productos sin precio confirmado)">
+        <span>Simular <code>precio-pendiente</code>:</span>
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggle-precio-pendiente" />
+          <span class="toggle-slider"></span>
+        </div>
+        <strong id="precio-status-label" style="font-size: 0.775rem; color: #D8CCE8;">Normal: Precios aprobados</strong>
+      </label>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       Encabezado y Navegación
+       ========================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="header-logo" aria-label="Ir al inicio de PEKES">
+        <img src="/images/logos/logo_negro.png" alt="PEKES Pet Shop" />
+        <span class="brand-tagline-badge">Cali · Catálogo Oficial</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="#catalogo" class="nav-link active">Gimnasios</a>
+        <a href="#pilares" class="nav-link">Pilares</a>
+        <a href="#estilo-vida" class="nav-link">Estilo de Vida</a>
+        <a href="#como-comprar" class="nav-link">Cómo Comprar</a>
+        <a href="#faq" class="nav-link">Preguntas</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://wa.me/573001234567?text=Hola%2C%20PEKES.%20Deseo%20hacer%20una%20consulta%20general%20sobre%20su%20cat%C3%A1logo%20de%20gimnasios." 
+           class="btn-header-wa" 
+           id="btn-header-wa"
+           target="_blank" 
+           rel="noopener"
+           aria-label="Abrir conversación de WhatsApp con PEKES">
+          <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Hero Principal
+       ========================================================================== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span>🐾 Edición Cali · Catálogo 2026</span>
+        </div>
+        <h1 class="hero-title">
+          PEKES — Para la vida <span>que comparten.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Mobiliario y gimnasios para gatos diseñados con maderas seleccionadas y textiles suaves. Estructuras armónicas que transforman tu hogar en un territorio de bienestar felino.
+        </p>
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn-primary">
+            Explorar Catálogo (51 Referencias)
+          </a>
+          <a href="#estilo-vida" class="btn-secondary">
+            Ver en Espacios Reales
+          </a>
+        </div>
+        <div class="hero-features">
+          <div class="hero-feature-item">
+            <strong>30</strong>
+            <span>Gimnasios de Piso</span>
+          </div>
+          <div class="hero-feature-item">
+            <strong>21</strong>
+            <span>Combos de Pared</span>
+          </div>
+          <div class="hero-feature-item">
+            <strong>100%</strong>
+            <span>Atención WhatsApp</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card-featured">
+          <span class="hero-badge-tag">Gimnasio Destacado</span>
+          <div class="hero-img-wrap">
+            <img src="/images/products/P16_SKY.jpeg" alt="Gimnasio para gatos SKY con cachorro bengalí" />
+          </div>
+          <div class="hero-card-footer">
+            <div>
+              <h3 class="hero-card-name">SKY</h3>
+              <p style="font-size: 0.8rem; color: #6B6673;">95 cm × 70 cm × 40 cm</p>
+            </div>
+            <div class="hero-card-price">$278.000 COP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Pilares de Marca (Diseño, Bienestar, Conexión)
+       ========================================================================== -->
+  <section class="pillars-section" id="pilares">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Nuestros Fundamentos</span>
+        <h2 class="section-title">Diseñados para convivir en equilibrio</h2>
+        <p class="section-desc">No somos una tienda de mascotas tradicional. Creamos objetos de estilo de vida para enriquecer el hábitat de quienes comparten su cotidianidad con gatos.</p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon-box">🏛️</div>
+          <h3 class="pillar-title">DISEÑO</h3>
+          <p class="pillar-desc">
+            Líneas sobrias, triplex de pino de 12 mm y textiles en tonos neutros que dialogan con la arquitectura interior contemporánea de tu hogar.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon-box">🌿</div>
+          <h3 class="pillar-title">BIENESTAR</h3>
+          <p class="pillar-desc">
+            Alturas estratégicas, postes de cabuya para estiramiento muscular y cápsulas panorámicas que satisfacen la necesidad instintiva de vigilar en calma.
+          </p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon-box">✨</div>
+          <h3 class="pillar-title">CONEXIÓN</h3>
+          <p class="pillar-desc">
+            Espacios compartidos donde tu gato descansa cerca de ti mientras trabajas o descansas, fortaleciendo el vínculo diario.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Catálogo Comercial de Productos (Etapa 1: 51 Referencias)
+       ========================================================================== -->
+  <section class="catalog-section" id="catalogo">
+    <div class="container">
+      <div class="section-head" style="margin-bottom: 2rem;">
+        <span class="section-tag">Catálogo Comercial Oficial</span>
+        <h2 class="section-title">Colección de Gimnasios PEKES</h2>
+        <p class="section-desc">Selecciona tu modelo favorito y consúltalo de inmediato por WhatsApp con su ficha técnica y medidas exactas.</p>
+      </div>
+
+      <!-- Barra de Filtros y Búsqueda -->
+      <div class="catalog-toolbar">
+        <div class="category-tabs" role="tablist">
+          <button class="tab-btn active" data-category="all">Todos los Gimnasios (51)</button>
+          <button class="tab-btn" data-category="Gimnasios de piso">Gimnasios de Piso (30)</button>
+          <button class="tab-btn" data-category="Gimnasios de pared">Gimnasios de Pared (21 Combos)</button>
+          <button class="tab-btn" data-category="Rascadores" style="opacity: 0.7;">Rascadores (Etapa 2)</button>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Buscar por nombre o medida..." />
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <span id="catalog-count" style="font-size: 0.85rem; font-weight: 600; color: #6B6673;">51 productos disponibles</span>
+        <span style="font-size: 0.8rem; color: #886EAE; font-weight: 600;">* Envíos y entregas en Cali por coordinar</span>
+      </div>
+
+      <!-- Cuadrícula de Productos -->
+      <div class="products-grid" id="products-grid">
+        <!-- Renderizado dinámicamente con JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Bloque de Estilo de Vida en Espacios Reales
+       ========================================================================== -->
+  <section class="lifestyle-section" id="estilo-vida">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Vida en Casa</span>
+        <h2 class="section-title">Gimnasios en Ambientes Reales</h2>
+        <p class="section-desc">Comprueba cómo nuestros gimnasios de piso y combos modulares de pared se integran en patios, salas y dormitorios en Cali.</p>
+      </div>
+
+      <div class="lifestyle-grid">
+        <div class="lifestyle-card">
+          <div class="lifestyle-img">
+            <img src="/images/products/P11_ZAFIRO.jpeg" alt="Gimnasio Zafiro con gato descansando en la cesta" />
+          </div>
+          <div class="lifestyle-content">
+            <h4>ZAFIRO — Confort y Descanso</h4>
+            <p>Cesta acolchada en forma de nido circular para siestas prolongadas en cualquier rincón luminoso.</p>
+          </div>
+        </div>
+
+        <div class="lifestyle-card">
+          <div class="lifestyle-img">
+            <img src="/images/products/P46_Combo_1.jpeg" alt="Combo 1 de pared instalado en pared de ladrillo rústico" />
+          </div>
+          <div class="lifestyle-content">
+            <h4>Combo #1 — Pared Modular en Ladrillo</h4>
+            <p>Circuito aéreo vertical con domo de observación acrílico y repisas en L para dinamismo felino.</p>
+          </div>
+        </div>
+
+        <div class="lifestyle-card">
+          <div class="lifestyle-img">
+            <img src="/images/products/P66_Combo_21.jpeg" alt="Combo 21 de pared instalado en esquina de habitación" />
+          </div>
+          <div class="lifestyle-content">
+            <h4>Combo #21 — Integración en Esquina</h4>
+            <p>Aprovechamiento tridimensional de esquinas con comedero elevado y casita domo superior.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Cómo Comprar por WhatsApp (Sin Pasarela Ni Checkout)
+       ========================================================================== -->
+  <section class="flow-section" id="como-comprar">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Modelo Consultivo</span>
+        <h2 class="section-title">Cómo Adquirir tu Gimnasio PEKES</h2>
+        <p class="section-desc">Para garantizarte la tonalidad adecuada y resolver medidas específicas de tu hogar, coordinamos cada pedido de forma personalizada por WhatsApp.</p>
+      </div>
+
+      <div class="flow-grid">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <h4 class="flow-title">Elige tu Producto</h4>
+          <p class="flow-desc">Revisa el catálogo, las medidas normalizadas en cm y los componentes del modelo o combo.</p>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <h4 class="flow-title">Clic en WhatsApp</h4>
+          <p class="flow-desc">El botón construye un mensaje exacto con el nombre, referencia SKU y precio publicado.</p>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <h4 class="flow-title">Confirmación</h4>
+          <p class="flow-desc">Acordamos contigo tonalidades disponibles de fábrica, dirección en Cali y opciones de entrega.</p>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <h4 class="flow-title">Fabricación y Entrega</h4>
+          <p class="flow-desc">Tu gimnasio se elabora por encargo y se programa su despacho directamente a tu domicilio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Preguntas Frecuentes (FAQ)
+       ========================================================================== -->
+  <section class="pillars-section" id="faq" style="background: var(--color-bg);">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Información y Dudas</span>
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+      </div>
+
+      <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;">
+        <div class="pillar-card" style="padding: 1.5rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿De qué material están fabricados los gimnasios?</h4>
+          <p style="font-size: 0.9rem; color: #6B6673;">Los combos de pared están construidos en triplex de pino de 12 mm con acabados pulidos. Los gimnasios de piso cuentan con postes forrados en cabuya natural para el afilado de uñas y superficies forradas en tela suave para descanso.</p>
+        </div>
+
+        <div class="pillar-card" style="padding: 1.5rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Cómo se eligen las tonalidades y telas?</h4>
+          <p style="font-size: 0.9rem; color: #6B6673;">Las tonalidades y accesorios están sujetos a disponibilidad de proveedores textiles. Al iniciar la conversación por WhatsApp, te compartimos la paleta física vigente para que elijas la combinación perfecta.</p>
+        </div>
+
+        <div class="pillar-card" style="padding: 1.5rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Los productos tienen entrega inmediata?</h4>
+          <p style="font-size: 0.9rem; color: #6B6673;">Todos los productos se elaboran por encargo. El tiempo de despacho depende de la disponibilidad de fábrica y la programación del taller.</p>
+        </div>
+
+        <div class="pillar-card" style="padding: 1.5rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Los precios incluyen transporte e instalación en Cali?</h4>
+          <p style="font-size: 0.9rem; color: #6B6673;">Las condiciones de transporte e instalación en Cali para los combos de pared se confirman directamente en la conversación de WhatsApp según la zona y características del muro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Pie de Página (Footer)
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h4 style="color: var(--color-white); font-weight: 800;">PEKES</h4>
+        <p>Para la vida que comparten. Mobiliario, gimnasios y experiencias para gatos y perros en Cali, Colombia.</p>
+        <div style="margin-top: 1rem; font-size: 0.8rem; color: #886EAE;">
+          Atención personalizada: Lunes a Sábado · 9:00 am a 6:00 pm
+        </div>
+      </div>
+
+      <div class="footer-nav">
+        <h5>Catálogo Etapa 1</h5>
+        <ul>
+          <li><a href="#catalogo">Gimnasios de Piso (30)</a></li>
+          <li><a href="#catalogo">Gimnasios de Pared (21)</a></li>
+          <li><a href="#catalogo">Combos con Cápsula</a></li>
+          <li><a href="#catalogo">Rascadores (Próximamente)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav">
+        <h5>Atención & Legal</h5>
+        <ul>
+          <li><a href="#como-comprar">Pedidos y Entregas</a></li>
+          <li><a href="#faq">Preguntas Frecuentes</a></li>
+          <li><a href="javascript:void(0)" onclick="alert('Borrador de Política de Privacidad y Tratamiento de Datos Personales (Ley 1581 de 2012) pendiente de validación por abogado de PEKES.')">Tratamiento de Datos</a></li>
+          <li><a href="javascript:void(0)" onclick="alert('Términos y Condiciones comerciales para ventas a distancia según Estatuto del Consumidor (Ley 1480 de 2011) en revisión legal.')">Términos y Condiciones</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2026 PEKES Pet Shop. Todos los derechos reservados. Cali, Colombia.</div>
+      <div>Los precios publicados son informativos y se confirman por WhatsApp. Sin pasarela de pago activa.</div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       Modal de Ficha Técnica de Producto (Section 8.5 & 10)
+       ========================================================================== -->
+  <div class="modal-overlay" id="product-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar ficha de producto">&times;</button>
+      
+      <div class="modal-grid">
+        <div class="modal-gallery">
+          <img src="" id="modal-img" alt="" />
+        </div>
+
+        <div class="modal-details">
+          <div class="modal-tag-row">
+            <span class="modal-tag" id="modal-cat">Gimnasios de piso</span>
+            <span class="modal-tag" id="modal-sku">SKU: PEK-000</span>
+            <span class="modal-tag" style="background: #EAE6F0; color: #1F1D1D;">Por encargo</span>
+          </div>
+
+          <h2 class="modal-title" id="modal-title">Nombre Producto</h2>
+          
+          <div class="modal-price-box">
+            <div class="modal-price-label">Precio publicado para Cali</div>
+            <div class="modal-price-val" id="modal-price-val">$0</div>
+          </div>
+
+          <p id="modal-desc" style="font-size: 0.9rem; color: #555;"></p>
+
+          <div class="modal-info-list">
+            <div class="info-row">
+              <strong>Dimensiones:</strong>
+              <span id="modal-dims">-</span>
+            </div>
+            <div class="info-row">
+              <strong>Disponibilidad:</strong>
+              <span>Por encargo. Sujeto a disponibilidad de fábrica.</span>
+            </div>
+            <div class="info-row">
+              <strong>Tonalidades:</strong>
+              <span>Sujetas a disponibilidad; se confirman por WhatsApp.</span>
+            </div>
+          </div>
+
+          <!-- Componentes para Combos de Pared -->
+          <div class="includes-box" id="modal-includes-box">
+            <h5>Lo que incluye este combo:</h5>
+            <ul class="includes-list" id="modal-includes-list"></ul>
+          </div>
+
+          <!-- Botón de WhatsApp según Sección 10 -->
+          <a href="#" class="btn-wa-master" id="modal-btn-wa" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/></svg>
+            CONSULTAR Y COMPRAR POR WHATSAPP
+          </a>
+
+          <!-- Vista previa del mensaje formateado que recibirá PEKES -->
+          <div>
+            <div class="wa-preview-label">Vista previa del mensaje preformateado:</div>
+            <div class="wa-preview-box" id="modal-wa-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Botón Flotante Global de WhatsApp
+       ========================================================================== -->
+  <a href="https://wa.me/573001234567?text=Hola%2C%20PEKES.%20Tengo%20una%20pregunta%20general%20sobre%20los%20gimnasios%20para%20gatos." 
+     class="floating-wa-btn" 
+     id="floating-wa-btn" 
+     target="_blank" 
+     rel="noopener" 
+     aria-label="Contactar a PEKES por WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/></svg>
+  </a>
+
+  <!-- ==========================================================================
+       Notificación Toast de Eventos de Medición (GA4 / Meta Pixel)
+       ========================================================================== -->
+  <div class="toast" id="analytics-toast">
+    <div>
+      <strong id="toast-message" style="display: block; margin-bottom: 0.25rem;"></strong>
+      <pre id="toast-payload" style="font-size: 0.725rem; font-family: monospace; background: rgba(255,255,255,0.1); padding: 0.4rem; border-radius: 4px; display: none;"></pre>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>
