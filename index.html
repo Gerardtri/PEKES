@@ -21,14 +21,19 @@
       </a>
 
       <nav class="main-nav" aria-label="Navegación principal">
+        <a href="#test-michi" class="nav-link nav-highlight">Test Michi ✨</a>
         <a href="#catalogo" class="nav-link active">Gimnasios</a>
         <a href="#pilares" class="nav-link">Pilares</a>
         <a href="#estilo-vida" class="nav-link">Estilo de Vida</a>
         <a href="#como-comprar" class="nav-link">Cómo Comprar</a>
-        <a href="#faq" class="nav-link">Preguntas</a>
       </nav>
 
       <div class="header-actions">
+        <button class="btn-purr-toggle" id="btn-purr-toggle" aria-label="Activar Modo Ronroneo" title="🐾 Activar Modo Ronroneo y huellitas interactivas">
+          <span class="purr-icon">🐾</span>
+          <span class="purr-text">Modo Michi</span>
+        </button>
+
         <a href="https://wa.me/573215427745?text=Hola%2C%20PEKES.%20Deseo%20hacer%20una%20consulta%20general%20sobre%20su%20cat%C3%A1logo%20de%20gimnasios." 
            class="btn-header-wa" 
            id="btn-header-wa"
@@ -209,6 +214,136 @@
           <p class="pillar-desc">
             Espacios compartidos donde tu gato descansa cerca de ti mientras trabajas o descansas, fortaleciendo el vínculo diario.
           </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       El Test Michi — Recomendador Interactivo de Personalidad Felina
+       ========================================================================== -->
+  <section class="michi-quiz-section" id="test-michi">
+    <div class="container">
+      <div class="michi-quiz-card">
+        <div class="michi-quiz-header">
+          <div class="quiz-badge">✨ Experiencia Interactiva PEKES</div>
+          <h2 class="quiz-title">Descubre el Gimnasio Ideal para tu Gato</h2>
+          <p class="quiz-subtitle">
+            Cada gato tiene una rutina y una forma única de habitar tu hogar. Responde 3 preguntas y nuestro algoritmo te recomendará el modelo ideal para su bienestar.
+          </p>
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quiz-progress-fill" style="width: 33.3%;"></div>
+          </div>
+          <span class="quiz-step-indicator" id="quiz-step-indicator">Paso 1 de 3</span>
+        </div>
+
+        <div class="michi-quiz-body">
+          <!-- Paso 1 -->
+          <div class="quiz-step active" id="quiz-step-1">
+            <h3 class="step-question">1. ¿Cómo describirías la personalidad de tu michi?</h3>
+            <div class="quiz-options-grid">
+              <button class="quiz-option-card" data-step="1" data-answer="observador">
+                <span class="option-icon">👑</span>
+                <strong class="option-title">El Observador Real</strong>
+                <span class="option-desc">Le fascina vigilar desde las alturas, mirar por la ventana y contemplar su territorio en calma.</span>
+              </button>
+              <button class="quiz-option-card" data-step="1" data-answer="atleta">
+                <span class="option-icon">⚡</span>
+                <strong class="option-title">El Atleta Intrépido</strong>
+                <span class="option-desc">Corre, trepa con energía, rasca intensamente y necesita desafíos aéreos para liberar vitalidad.</span>
+              </button>
+              <button class="quiz-option-card" data-step="1" data-answer="zen">
+                <span class="option-icon">☁️</span>
+                <strong class="option-title">El Zen Dormilón</strong>
+                <span class="option-desc">Ama las siestas largas, las telas suaves y los refugios cálidos tipo cueva para sentirse protegido.</span>
+              </button>
+              <button class="quiz-option-card" data-step="1" data-answer="social">
+                <span class="option-icon">🐾</span>
+                <strong class="option-title">El Curioso Guardián</strong>
+                <span class="option-desc">Siempre te acompaña cerca del escritorio o sofá. Quiere estar presente en cada rutina de la casa.</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="quiz-step" id="quiz-step-2">
+            <h3 class="step-question">2. ¿Cómo es el espacio disponible en tu hogar en Cali?</h3>
+            <div class="quiz-options-grid">
+              <button class="quiz-option-card" data-step="2" data-answer="pared">
+                <span class="option-icon">🧱</span>
+                <strong class="option-title">Paredes Libres (Apto)</strong>
+                <span class="option-desc">Quiero aprovechar la altura vertical sin ocupar metros útiles en el suelo de mi sala o habitación.</span>
+              </button>
+              <button class="quiz-option-card" data-step="2" data-answer="suelo">
+                <span class="option-icon">🛋️</span>
+                <strong class="option-title">Espacio Amplio en Piso</strong>
+                <span class="option-desc">Tengo un buen espacio en el suelo para una torre de piso imponente, estable y acogedora.</span>
+              </button>
+              <button class="quiz-option-card" data-step="2" data-answer="mixto">
+                <span class="option-icon">🪟</span>
+                <strong class="option-title">Rincón de Ventana o Esquina</strong>
+                <span class="option-desc">Busco una pieza compacta o modular para colocar junto a ventanales o rincones arquitectónicos.</span>
+              </button>
+            </div>
+            <button class="quiz-btn-back" id="quiz-back-to-1">← Volver al paso anterior</button>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="quiz-step" id="quiz-step-3">
+            <h3 class="step-question">3. ¿Cuántos gatos disfrutarán del gimnasio?</h3>
+            <div class="quiz-options-grid">
+              <button class="quiz-option-card" data-step="3" data-answer="uno">
+                <span class="option-icon">🐱</span>
+                <strong class="option-title">1 Michi consentido</strong>
+                <span class="option-desc">Un único rey o reina de la casa que disfrutará todos los niveles en exclusiva.</span>
+              </button>
+              <button class="quiz-option-card" data-step="3" data-answer="dos">
+                <span class="option-icon">🐱🐱</span>
+                <strong class="option-title">2 Compañeros felinos</strong>
+                <span class="option-desc">Necesitamos al menos dos zonas de descanso para evitar disputas de territorio.</span>
+              </button>
+              <button class="quiz-option-card" data-step="3" data-answer="manada">
+                <span class="option-icon">🦁</span>
+                <strong class="option-title">Manada (3 o más michis)</strong>
+                <span class="option-desc">Buscamos una estructura robusta o circuito amplio con múltiples plataformas y rascadores.</span>
+              </button>
+            </div>
+            <button class="quiz-btn-back" id="quiz-back-to-2">← Volver al paso anterior</button>
+          </div>
+
+          <!-- Pantalla de Resultado -->
+          <div class="quiz-result-view" id="quiz-result-view">
+            <div class="result-badge-tag">✨ Match Ideal Encontrado</div>
+            <div class="result-grid">
+              <div class="result-media">
+                <img src="/images/products/P16_SKY.jpeg" id="result-img" alt="Gimnasio recomendado" />
+                <span class="result-category-pill" id="result-category-pill">Torre de Piso</span>
+              </div>
+              <div class="result-info">
+                <div class="result-profile-label">Personalidad de tu Gato:</div>
+                <h3 class="result-profile-title" id="result-profile-title">El Observador Real</h3>
+                <p class="result-profile-desc" id="result-profile-desc">
+                  Tu gato necesita una atalaya elevada para sentirse seguro mientras domina visualmente toda la estancia.
+                </p>
+                
+                <div class="result-product-box">
+                  <div class="result-product-meta">
+                    <span class="result-product-name" id="result-product-name">SKY</span>
+                    <span class="result-product-dims" id="result-product-dims">95 cm × 70 cm × 40 cm</span>
+                  </div>
+                  <div class="result-product-price" id="result-product-price">$278.000 COP</div>
+                </div>
+
+                <div class="result-actions">
+                  <a href="#" class="btn-primary result-wa-btn" id="result-wa-btn" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/></svg>
+                    Consultar este modelo por WhatsApp
+                  </a>
+                  <button class="btn-secondary" id="quiz-restart-btn">↺ Repetir el test</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -324,6 +324,231 @@ function initEvents() {
   // Hero Slider & Cat Peeker Controllers
   initHeroSlider();
   initCatPeeker();
+  initMichiQuiz();
+  initPurrMode();
+}
+
+// ==============================================================================
+// El Test Michi — Recomendador de Personalidad Felina
+// ==============================================================================
+function initMichiQuiz() {
+  const step1 = document.getElementById('quiz-step-1');
+  const step2 = document.getElementById('quiz-step-2');
+  const step3 = document.getElementById('quiz-step-3');
+  const resultView = document.getElementById('quiz-result-view');
+  const progressFill = document.getElementById('quiz-progress-fill');
+  const stepIndicator = document.getElementById('quiz-step-indicator');
+  if (!step1 || !resultView) return;
+
+  let quizState = {
+    p1: null,
+    p2: null,
+    p3: null
+  };
+
+  function setStep(stepNum) {
+    step1.classList.toggle('active', stepNum === 1);
+    step2.classList.toggle('active', stepNum === 2);
+    step3.classList.toggle('active', stepNum === 3);
+    resultView.classList.toggle('active', stepNum === 4);
+
+    if (stepNum <= 3) {
+      if (progressFill) progressFill.style.width = `${(stepNum / 3) * 100}%`;
+      if (stepIndicator) stepIndicator.textContent = `Paso ${stepNum} de 3`;
+    } else {
+      if (progressFill) progressFill.style.width = '100%';
+      if (stepIndicator) stepIndicator.textContent = '¡Resultado!';
+    }
+  }
+
+  // Options click
+  document.querySelectorAll('.quiz-option-card').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const step = parseInt(btn.getAttribute('data-step') || '1', 10);
+      const ans = btn.getAttribute('data-answer');
+
+      if (step === 1) {
+        quizState.p1 = ans;
+        setStep(2);
+      } else if (step === 2) {
+        quizState.p2 = ans;
+        setStep(3);
+      } else if (step === 3) {
+        quizState.p3 = ans;
+        calculateResult();
+        setStep(4);
+      }
+    });
+  });
+
+  // Back buttons
+  document.getElementById('quiz-back-to-1')?.addEventListener('click', () => setStep(1));
+  document.getElementById('quiz-back-to-2')?.addEventListener('click', () => setStep(2));
+  document.getElementById('quiz-restart-btn')?.addEventListener('click', () => {
+    quizState = { p1: null, p2: null, p3: null };
+    setStep(1);
+  });
+
+  function calculateResult() {
+    let matchedSku = 'PEK-PIS-011'; // Default: SKY
+    let profileTitle = 'El Observador Real';
+    let profileDesc = 'Tu gato necesita una atalaya elevada para sentirse seguro mientras domina visualmente toda la estancia.';
+
+    const { p1, p2, p3 } = quizState;
+
+    if (p1 === 'atleta') {
+      profileTitle = 'El Atleta Intrépido';
+      profileDesc = 'Tu gato tiene un instinto enérgico y dinámico. Requiere recorridos verticales, postes largos de rascado y desafíos para liberar su vitalidad.';
+      if (p2 === 'pared') {
+        matchedSku = p3 === 'manada' ? 'PEK-PAR-021' : 'PEK-PAR-001';
+      } else {
+        matchedSku = p3 === 'manada' ? 'PEK-PIS-030' : 'PEK-PIS-025';
+      }
+    } else if (p1 === 'zen') {
+      profileTitle = 'El Zen Dormilón';
+      profileDesc = 'Tu compañero prioriza la calma, el abrigo y las texturas acogedoras. Adora acurrucarse en refugios cerrados y plataformas acolchadas.';
+      if (p2 === 'pared') {
+        matchedSku = 'PEK-PAR-004';
+      } else {
+        matchedSku = 'PEK-PIS-005';
+      }
+    } else if (p1 === 'social') {
+      profileTitle = 'El Curioso Guardián';
+      profileDesc = 'Tu gato vive cada momento contigo y quiere estar cerca de tus rutinas sin perder su propio territorio de descanso y juego.';
+      matchedSku = p2 === 'pared' ? 'PEK-PAR-002' : 'PEK-PIS-006';
+    } else {
+      profileTitle = 'El Observador Real';
+      profileDesc = 'Tu gato es un estratega nato. Le apasiona vigilar las ventanas y contemplar el movimiento del hogar desde la altura.';
+      matchedSku = p2 === 'pared' ? 'PEK-PAR-001' : 'PEK-PIS-011';
+    }
+
+    let product = state.products.find(p => p.sku === matchedSku) || state.products[0];
+
+    const titleEl = document.getElementById('result-profile-title');
+    const descEl = document.getElementById('result-profile-desc');
+    const imgEl = document.getElementById('result-img');
+    const catEl = document.getElementById('result-category-pill');
+    const nameEl = document.getElementById('result-product-name');
+    const dimsEl = document.getElementById('result-product-dims');
+    const priceEl = document.getElementById('result-product-price');
+
+    if (titleEl) titleEl.textContent = profileTitle;
+    if (descEl) descEl.textContent = profileDesc;
+    if (imgEl) {
+      imgEl.src = product.image;
+      imgEl.alt = `Gimnasio recomendado ${product.name}`;
+    }
+    if (catEl) catEl.textContent = product.category;
+    if (nameEl) nameEl.textContent = product.name;
+    if (dimsEl) dimsEl.textContent = product.dimensions;
+    if (priceEl) priceEl.textContent = formatCOP(product.price);
+
+    const msg = `Hola, PEKES. Hice el Test Michi en su web y el perfil de mi gato fue "${profileTitle}". El gimnasio recomendado es:
+
+Producto: ${product.name}
+Referencia: ${product.sku}
+Precio publicado: ${formatCOP(product.price)}
+
+¿Me pueden confirmar disponibilidad, colores y opciones de entrega en Cali?`;
+
+    const waBtn = document.getElementById('result-wa-btn');
+    if (waBtn) {
+      waBtn.href = `https://wa.me/${state.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+      waBtn.onclick = () => {
+        trackWhatsAppClick(product, 'michi_quiz_result');
+      };
+    }
+  }
+}
+
+// ==============================================================================
+// Modo Ronroneo (Web Audio Synthesis + Huellitas Interactivas)
+// ==============================================================================
+function initPurrMode() {
+  const toggleBtn = document.getElementById('btn-purr-toggle');
+  let audioCtx = null;
+  let oscillator = null;
+  let gainNode = null;
+  let lfo = null;
+  let isPurring = false;
+
+  function startPurrSound() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      if (!audioCtx) audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(95, audioCtx.currentTime);
+
+      oscillator = audioCtx.createOscillator();
+      oscillator.type = 'triangle';
+      oscillator.frequency.setValueAtTime(28, audioCtx.currentTime);
+
+      lfo = audioCtx.createOscillator();
+      const lfoGain = audioCtx.createGain();
+      lfo.frequency.setValueAtTime(22, audioCtx.currentTime);
+      lfoGain.gain.setValueAtTime(14, audioCtx.currentTime);
+
+      lfo.connect(lfoGain);
+      lfoGain.connect(oscillator.frequency);
+
+      oscillator.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.start();
+      lfo.start();
+      isPurring = true;
+    } catch (e) {
+      console.log('[Purr Audio] Note:', e);
+    }
+  }
+
+  function stopPurrSound() {
+    if (oscillator) {
+      try { oscillator.stop(); lfo.stop(); } catch(e) {}
+      oscillator = null;
+      lfo = null;
+    }
+    isPurring = false;
+  }
+
+  toggleBtn?.addEventListener('click', () => {
+    const textSpan = toggleBtn.querySelector('.purr-text');
+    if (!isPurring) {
+      startPurrSound();
+      toggleBtn.classList.add('active');
+      if (textSpan) textSpan.textContent = 'Ronroneando ♪';
+    } else {
+      stopPurrSound();
+      toggleBtn.classList.remove('active');
+      if (textSpan) textSpan.textContent = 'Modo Michi';
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('a, button, input, textarea')) return;
+    spawnPawStamp(e.clientX, e.clientY);
+  });
+
+  function spawnPawStamp(x, y) {
+    const paw = document.createElement('div');
+    paw.className = 'paw-stamp';
+    paw.textContent = '🐾';
+    paw.style.left = `${x}px`;
+    paw.style.top = `${y}px`;
+    paw.style.color = isPurring ? '#8269B2' : 'rgba(130, 105, 178, 0.45)';
+    document.body.appendChild(paw);
+    setTimeout(() => {
+      paw.remove();
+    }, 1200);
+  }
 }
 
 // Hero Banner Carousel Controller

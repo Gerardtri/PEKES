@@ -1651,3 +1651,374 @@ img {
   }
 }
 
+/* ==========================================================================
+   Modo Ronroneo (Purr Mode Button & Paw Animation)
+   ========================================================================== */
+.btn-purr-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--color-brand-violet-light);
+  color: var(--color-brand-violet-dark);
+  border: 1px solid rgba(130, 105, 178, 0.3);
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.btn-purr-toggle:hover {
+  background: #E8DFF5;
+  border-color: var(--color-brand-violet);
+  transform: translateY(-1px);
+}
+
+.btn-purr-toggle.active {
+  background: var(--color-brand-violet);
+  color: var(--color-white);
+  border-color: var(--color-brand-violet);
+  box-shadow: 0 0 16px rgba(130, 105, 178, 0.45);
+  animation: purrPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes purrPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(130, 105, 178, 0.4); }
+  50% { transform: scale(1.04); box-shadow: 0 0 22px rgba(130, 105, 178, 0.7); }
+}
+
+.nav-highlight {
+  color: var(--color-brand-violet) !important;
+  font-weight: 700 !important;
+}
+
+/* Huellitas interactivas que flotan al hacer clic */
+.paw-stamp {
+  position: fixed;
+  font-size: 1.5rem;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  animation: pawFloat 1.2s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes pawFloat {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
+  50% { opacity: 0.8; transform: translate(-50%, -70%) scale(1.1) rotate(15deg); }
+  100% { opacity: 0; transform: translate(-50%, -100%) scale(1.2) rotate(-10deg); }
+}
+
+/* ==========================================================================
+   El Test Michi (Interactive Quiz Section)
+   ========================================================================== */
+.michi-quiz-section {
+  padding: 4.5rem 0 3.5rem;
+  background: linear-gradient(180deg, var(--color-brand-violet-light) 0%, #FFFFFF 100%);
+  position: relative;
+}
+
+.michi-quiz-card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(130, 105, 178, 0.22);
+  box-shadow: 0 24px 50px -15px rgba(110, 85, 160, 0.16);
+  padding: 2.75rem 2.25rem;
+  max-width: 920px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.michi-quiz-header {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.quiz-badge {
+  display: inline-block;
+  background: var(--color-brand-violet-light);
+  color: var(--color-brand-violet-dark);
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.65rem;
+}
+
+.quiz-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-brand-black);
+  margin-bottom: 0.65rem;
+  letter-spacing: -0.01em;
+}
+
+.quiz-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.55;
+}
+
+.quiz-progress-bar {
+  width: 100%;
+  max-width: 380px;
+  height: 6px;
+  background: #EAE4F0;
+  border-radius: 999px;
+  margin: 0 auto 0.5rem;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: var(--color-brand-violet);
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quiz-step-indicator {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-brand-violet-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Steps & Options */
+.quiz-step {
+  display: none;
+  animation: fadeIn 0.35s ease;
+}
+
+.quiz-step.active {
+  display: block;
+}
+
+.step-question {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-brand-black);
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.quiz-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 680px) {
+  .quiz-options-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.quiz-option-card {
+  background: #FAF8FC;
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.quiz-option-card:hover {
+  background: var(--color-white);
+  border-color: var(--color-brand-violet);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -8px rgba(130, 105, 178, 0.25);
+}
+
+.option-icon {
+  font-size: 1.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.option-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-brand-black);
+}
+
+.option-desc {
+  font-size: 0.825rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.quiz-btn-back {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  display: inline-block;
+  transition: color var(--transition-fast);
+}
+
+.quiz-btn-back:hover {
+  color: var(--color-brand-violet);
+}
+
+/* Quiz Result Card */
+.quiz-result-view {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.quiz-result-view.active {
+  display: block;
+}
+
+.result-badge-tag {
+  display: inline-block;
+  background: var(--color-brand-black);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1.25rem;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .result-grid {
+    grid-template-columns: 1fr 1.25fr;
+  }
+}
+
+.result-media {
+  background: var(--color-brand-violet-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-media img {
+  max-width: 92%;
+  max-height: 92%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.12));
+}
+
+.result-category-pill {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: var(--color-brand-black);
+}
+
+.result-profile-label {
+  font-size: 0.775rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-brand-violet-dark);
+  margin-bottom: 0.25rem;
+}
+
+.result-profile-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-brand-black);
+  margin-bottom: 0.65rem;
+}
+
+.result-profile-desc {
+  font-size: 0.925rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.result-product-box {
+  background: #FAF8FC;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.15rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.result-product-name {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-brand-black);
+}
+
+.result-product-dims {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.result-product-price {
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--color-brand-violet-dark);
+}
+
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.result-wa-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+}
+
+.result-wa-btn:hover {
+  background: var(--color-wa-hover);
+}
+
+.result-wa-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
