@@ -6,7 +6,7 @@ const state = {
   activeFilter: 'all', // 'all', 'Gimnasios de piso', 'Gimnasios de pared', 'Rascadores'
   searchQuery: '',
   isPrecioPendienteSimulated: false,
-  whatsappNumber: '573001234567', // Configurable
+  whatsappNumber: '573215427745', // WhatsApp oficial provisto por PEKES
   selectedProduct: null
 };
 

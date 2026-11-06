@@ -46,7 +46,7 @@ def init_db():
     ''')
 
     # Default settings
-    cursor.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('whatsapp_number', '573001234567')")
+    cursor.execute("INSERT OR REPLACE INTO settings (key, value) VALUES ('whatsapp_number', '573215427745')")
     cursor.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('store_name', 'PEKES Pet Shop')")
     cursor.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('city', 'Cali, Colombia')")
     cursor.execute("INSERT OR IGNORE INTO settings (key, value) VALUES ('markup_factor', '1.30')")
