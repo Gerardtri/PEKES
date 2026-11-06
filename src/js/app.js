@@ -320,6 +320,101 @@ function initEvents() {
       header.classList.remove('scrolled');
     }
   });
+
+  // Hero Slider & Cat Peeker Controllers
+  initHeroSlider();
+  initCatPeeker();
+}
+
+// Hero Banner Carousel Controller
+function initHeroSlider() {
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.slider-dot');
+  const prevBtn = document.getElementById('hero-prev-btn');
+  const nextBtn = document.getElementById('hero-next-btn');
+  const slider = document.getElementById('hero-slider');
+  if (!slides.length) return;
+
+  let currentSlide = 0;
+  let autoplayTimer = null;
+
+  function showSlide(index) {
+    if (index >= slides.length) index = 0;
+    if (index < 0) index = slides.length - 1;
+    currentSlide = index;
+
+    slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      showSlide(currentSlide + 1);
+    }, 4500);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) clearInterval(autoplayTimer);
+  }
+
+  nextBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showSlide(currentSlide + 1);
+    startAutoplay();
+  });
+
+  prevBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showSlide(currentSlide - 1);
+    startAutoplay();
+  });
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(dot.getAttribute('data-index') || '0', 10);
+      showSlide(idx);
+      startAutoplay();
+    });
+  });
+
+  // Clicking a slide opens the corresponding product modal
+  slides.forEach(slide => {
+    slide.addEventListener('click', () => {
+      const pId = slide.getAttribute('data-product-id');
+      const prod = state.products.find(p => p.id === pId);
+      if (prod) openProductModal(prod);
+    });
+  });
+
+  slider?.addEventListener('mouseenter', stopAutoplay);
+  slider?.addEventListener('mouseleave', startAutoplay);
+
+  startAutoplay();
+}
+
+// Interactive Cat Mascot Peeker Controller
+function initCatPeeker() {
+  const peeker = document.getElementById('cat-peeker');
+  const bubble = document.getElementById('cat-bubble');
+  const closeBtn = document.getElementById('cat-bubble-close');
+  const catChar = document.getElementById('cat-character-wrap');
+  if (!peeker || !bubble) return;
+
+  // Pop up speech bubble gracefully after 3.5 seconds
+  setTimeout(() => {
+    bubble.classList.add('active');
+  }, 3500);
+
+  closeBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    bubble.classList.remove('active');
+  });
+
+  catChar?.addEventListener('click', () => {
+    bubble.classList.toggle('active');
+  });
 }
 
 // App Launch

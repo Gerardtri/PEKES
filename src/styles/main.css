@@ -370,59 +370,93 @@ img {
 
 .hero-visual {
   position: relative;
+  width: 100%;
 }
 
-.hero-card-featured {
+.hero-slider {
   background: var(--color-white);
   border-radius: var(--radius-xl);
   padding: 1.25rem;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--color-border);
+  box-shadow: 0 20px 45px -15px rgba(130, 105, 178, 0.22);
+  border: 1px solid rgba(130, 105, 178, 0.18);
   position: relative;
   overflow: hidden;
+}
+
+.hero-slides-wrapper {
+  position: relative;
+  aspect-ratio: 4/5;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, #FAF7FC 0%, var(--color-brand-violet-light) 100%);
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0.96);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  z-index: 2;
 }
 
 .hero-img-wrap {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--color-brand-violet-light);
-  aspect-ratio: 4/5;
+  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1.5rem;
+  overflow: hidden;
 }
 
 .hero-img-wrap img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  transition: transform 0.4s ease;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.1));
+  transition: transform 0.5s ease;
 }
 
-.hero-card-featured:hover .hero-img-wrap img {
-  transform: scale(1.03);
+.hero-slide:hover .hero-img-wrap img {
+  transform: scale(1.04);
 }
 
 .hero-badge-tag {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  background: var(--color-brand-black);
+  background: rgba(20, 18, 23, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--color-white);
-  padding: 0.35rem 0.85rem;
+  padding: 0.35rem 0.9rem;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
+  z-index: 3;
 }
 
 .hero-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
-  padding: 0.25rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(130, 105, 178, 0.12);
 }
 
 .hero-card-name {
@@ -432,10 +466,66 @@ img {
   color: var(--color-brand-black);
 }
 
+.hero-card-dims {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
 .hero-card-price {
-  font-weight: 700;
-  font-size: 1.15rem;
+  font-weight: 800;
+  font-size: 1.25rem;
   color: var(--color-brand-violet-dark);
+}
+
+/* Slider Navigation Controls */
+.hero-slider-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.85rem;
+  padding: 0 0.5rem;
+}
+
+.slider-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: var(--color-text-main);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1;
+}
+
+.slider-arrow:hover {
+  background: var(--color-brand-violet);
+  color: var(--color-white);
+  border-color: var(--color-brand-violet);
+  transform: scale(1.08);
+}
+
+.slider-dots {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.slider-dot {
+  width: 22px;
+  height: 5px;
+  border-radius: 999px;
+  background: #E2DBE8;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.slider-dot.active {
+  background: var(--color-brand-violet);
+  width: 36px;
 }
 
 /* ==========================================================================
@@ -1383,5 +1473,181 @@ img {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Popup Ingenioso: Mascota PEKES Asomándose (Interactive Cat Peeker)
+   ========================================================================== */
+.cat-peeker {
+  position: fixed;
+  bottom: 0;
+  left: 2rem;
+  z-index: 98;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+  font-family: var(--font-body);
+}
+
+/* Bocadillo de diálogo */
+.cat-bubble {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(130, 105, 178, 0.28);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.25rem;
+  box-shadow: 0 16px 36px -8px rgba(74, 53, 105, 0.22);
+  max-width: 290px;
+  position: relative;
+  margin-bottom: 0.65rem;
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.95);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cat-bubble.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Flecha/cola del bocadillo */
+.cat-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 36px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 9px solid rgba(255, 255, 255, 0.98);
+}
+
+.cat-bubble-close {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem;
+  transition: color var(--transition-fast);
+}
+
+.cat-bubble-close:hover {
+  color: var(--color-brand-black);
+}
+
+.cat-bubble-badge {
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-brand-violet-dark);
+  margin-bottom: 0.35rem;
+}
+
+.cat-bubble-text {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--color-text-main);
+  margin-bottom: 0.85rem;
+}
+
+.cat-bubble-text strong {
+  color: var(--color-brand-black);
+}
+
+.cat-bubble-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: #25D366;
+  color: var(--color-white);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-decoration: none;
+  width: 100%;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+}
+
+.cat-bubble-btn:hover {
+  background: var(--color-wa-hover);
+  transform: translateY(-1px);
+}
+
+.cat-bubble-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+/* Figura del gatito peeking */
+.cat-character-wrap {
+  width: 86px;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(14px);
+  user-select: none;
+}
+
+.cat-character-wrap:hover {
+  transform: translateY(0);
+}
+
+.cat-character-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+  transition: transform 0.2s ease;
+}
+
+.cat-character-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--color-brand-violet);
+  color: var(--color-white);
+  font-size: 0.675rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(130, 105, 178, 0.4);
+  animation: bounceBadge 2s infinite ease-in-out;
+}
+
+@keyframes bounceBadge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@media (max-width: 600px) {
+  .cat-peeker {
+    left: 1rem;
+  }
+  .cat-bubble {
+    max-width: 250px;
+    padding: 0.95rem 1rem;
+  }
+  .cat-character-wrap {
+    width: 72px;
+    transform: translateY(16px);
+  }
 }
 

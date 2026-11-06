@@ -82,17 +82,95 @@
       </div>
 
       <div class="hero-visual">
-        <div class="hero-card-featured">
-          <span class="hero-badge-tag">Gimnasio Destacado</span>
-          <div class="hero-img-wrap">
-            <img src="/images/products/P16_SKY.jpeg" alt="Gimnasio para gatos SKY con cachorro bengalí" />
-          </div>
-          <div class="hero-card-footer">
-            <div>
-              <h3 class="hero-card-name">SKY</h3>
-              <p style="font-size: 0.8rem; color: #6B6673;">95 cm × 70 cm × 40 cm</p>
+        <div class="hero-slider" id="hero-slider" aria-label="Galería destacada de gimnasios PEKES">
+          <div class="hero-slides-wrapper" id="hero-slides-wrapper">
+            <!-- Slide 1: SKY -->
+            <div class="hero-slide active" data-product-id="piso-16">
+              <span class="hero-badge-tag">Torre Destacada · Piso</span>
+              <div class="hero-img-wrap">
+                <img src="/images/products/P16_SKY.jpeg" alt="Gimnasio para gatos SKY" />
+              </div>
+              <div class="hero-card-footer">
+                <div>
+                  <h3 class="hero-card-name">SKY</h3>
+                  <p class="hero-card-dims">95 cm × 70 cm × 40 cm</p>
+                </div>
+                <div class="hero-card-price">$278.000 COP</div>
+              </div>
             </div>
-            <div class="hero-card-price">$278.000 COP</div>
+
+            <!-- Slide 2: Combo #1 -->
+            <div class="hero-slide" data-product-id="pared-1">
+              <span class="hero-badge-tag">Circuito Aéreo · Pared</span>
+              <div class="hero-img-wrap">
+                <img src="/images/products/P46_Combo_1.jpeg" alt="Combo 1 de pared en triplex de pino" />
+              </div>
+              <div class="hero-card-footer">
+                <div>
+                  <h3 class="hero-card-name">Combo #1 de Pared</h3>
+                  <p class="hero-card-dims">Triplex Pino 12 mm · Domo acrílico</p>
+                </div>
+                <div class="hero-card-price">$687.000 COP</div>
+              </div>
+            </div>
+
+            <!-- Slide 3: HEFESTO -->
+            <div class="hero-slide" data-product-id="piso-35">
+              <span class="hero-badge-tag">Edición Monumental · Piso</span>
+              <div class="hero-img-wrap">
+                <img src="/images/products/P35_HEFESTO.jpeg" alt="Gimnasio HEFESTO con doble cápsula" />
+              </div>
+              <div class="hero-card-footer">
+                <div>
+                  <h3 class="hero-card-name">HEFESTO</h3>
+                  <p class="hero-card-dims">165 cm × 110 cm × 70 cm · Doble domo</p>
+                </div>
+                <div class="hero-card-price">$564.000 COP</div>
+              </div>
+            </div>
+
+            <!-- Slide 4: ZAFIRO -->
+            <div class="hero-slide" data-product-id="piso-11">
+              <span class="hero-badge-tag">Diseño Circular · Piso</span>
+              <div class="hero-img-wrap">
+                <img src="/images/products/P11_ZAFIRO.jpeg" alt="Gimnasio ZAFIRO con cesta cóncava" />
+              </div>
+              <div class="hero-card-footer">
+                <div>
+                  <h3 class="hero-card-name">ZAFIRO</h3>
+                  <p class="hero-card-dims">95 cm alto · Base ⌀60 cm</p>
+                </div>
+                <div class="hero-card-price">$216.000 COP</div>
+              </div>
+            </div>
+
+            <!-- Slide 5: Combo #21 -->
+            <div class="hero-slide" data-product-id="pared-21">
+              <span class="hero-badge-tag">Circuito Máximo · Pared</span>
+              <div class="hero-img-wrap">
+                <img src="/images/products/P66_Combo_21.jpeg" alt="Combo 21 de pared con domo y mueble flotante" />
+              </div>
+              <div class="hero-card-footer">
+                <div>
+                  <h3 class="hero-card-name">Combo #21</h3>
+                  <p class="hero-card-dims">Domo premium + Arenero flotante</p>
+                </div>
+                <div class="hero-card-price">$1.039.000 COP</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controles del Slider -->
+          <div class="hero-slider-nav">
+            <button class="slider-arrow prev" id="hero-prev-btn" aria-label="Anterior modelo">‹</button>
+            <div class="slider-dots" id="hero-slider-dots">
+              <span class="slider-dot active" data-index="0"></span>
+              <span class="slider-dot" data-index="1"></span>
+              <span class="slider-dot" data-index="2"></span>
+              <span class="slider-dot" data-index="3"></span>
+              <span class="slider-dot" data-index="4"></span>
+            </div>
+            <button class="slider-arrow next" id="hero-next-btn" aria-label="Siguiente modelo">›</button>
           </div>
         </div>
       </div>
@@ -502,6 +580,34 @@
       </div>
     </div>
   </div>
+
+  <!-- ==========================================================================
+       Popup Ingenioso: Mascota PEKES Asomándose (Interactive Cat Peeker)
+       ========================================================================== -->
+  <aside class="cat-peeker" id="cat-peeker" aria-label="Asistente interactivo PEKES">
+    <!-- Bocadillo de diálogo interactivo -->
+    <div class="cat-bubble" id="cat-bubble">
+      <button class="cat-bubble-close" id="cat-bubble-close" aria-label="Minimizar mensaje">&times;</button>
+      <div class="cat-bubble-badge">🐾 Asistente PEKES</div>
+      <p class="cat-bubble-text">
+        <strong>¡Miau! Soy la mascota de PEKES.</strong><br />
+        ¿Tienes dudas con las medidas o el gimnasio ideal para tu espacio?
+      </p>
+      <a href="https://wa.me/573215427745?text=Hola%2C%20PEKES.%20Vi%20al%20gatito%20en%20su%20web%20y%20quisiera%20asesor%C3%ADa%20para%20elegir%20el%20gimnasio%20ideal." 
+         class="cat-bubble-btn" 
+         target="_blank" 
+         rel="noopener">
+        <span>Asesorarme por WhatsApp</span>
+        <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/></svg>
+      </a>
+    </div>
+
+    <!-- Figura del gato asomándose con animación -->
+    <div class="cat-character-wrap" id="cat-character-wrap" role="button" tabindex="0" aria-label="Abrir mensaje de la mascota PEKES">
+      <img src="/images/logos/mascota_cropped.png" alt="Mascota gato de PEKES" class="cat-character-img" />
+      <span class="cat-character-badge">🐾 ¡Hola!</span>
+    </div>
+  </aside>
 
   <!-- ==========================================================================
        Botón Flotante Global de WhatsApp
