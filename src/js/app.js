@@ -158,9 +158,13 @@ function renderProducts() {
   });
 }
 
+// SEO dinámico para fichas de producto compartibles
+function updateProductSeo(product){const t=document.querySelector('title'),d=document.querySelector('meta[name="description"]'),c=document.querySelector('link[rel="canonical"]');const u='https://pekes.shop/#producto-'+product.id;if(t)t.textContent=product.name+' | Gimnasio para gatos | PEKES';if(d)d.setAttribute('content',product.description+' Disponible por encargo en Cali.');if(c)c.setAttribute('href',u);let z=document.getElementById('product-seo-schema');if(!z){z=document.createElement('script');z.type='application/ld+json';z.id='product-seo-schema';document.head.appendChild(z)}z.textContent=JSON.stringify({'@context':'https://schema.org','@type':'Product',name:product.name,sku:product.sku,description:product.description,image:'https://pekes.shop'+product.image,offers:{'@type':'Offer',priceCurrency:'COP',price:String(product.price),url:u}})}
+function resetHomeSeo(){document.querySelector('title').textContent='PEKES | Gimnasios y rascadores para gatos en Cali';document.querySelector('link[rel="canonical"]').setAttribute('href','https://pekes.shop/');document.getElementById('product-seo-schema')?.remove()}
 // Modal Logic
 function openProductModal(product) {
   state.selectedProduct = product;
+  updateProductSeo(product);
   const isPending = state.isPrecioPendienteSimulated;
   const modal = document.getElementById('product-modal');
   
@@ -211,6 +215,7 @@ function closeProductModal() {
   if (!modal) return;
   modal.classList.remove('active');
   document.body.style.overflow = '';
+  resetHomeSeo();
 }
 
 // Legal Modal Controllers
