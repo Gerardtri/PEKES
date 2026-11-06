@@ -247,14 +247,6 @@ def manage_settings():
         settings = {r['key']: r['value'] for r in rows}
         return jsonify(settings)
 
-# ==============================================================================
-# Admin Dashboard Route
-# ==============================================================================
-
-@app.route('/admin')
-def admin_panel():
-    return render_template('admin.html')
-
 if __name__ == '__main__':
     init_db()
     print('Starting PEKES Python Backend on http://localhost:5001')

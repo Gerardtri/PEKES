@@ -34,7 +34,6 @@ def main():
     print("\n" + "=" * 60)
     print("✨ ¡TODO LISTO Y FUNCIONANDO! ✨")
     print("  🌐 Tienda Pública:      http://localhost:5173/")
-    print("  ⚙️  Panel de Admin:      http://localhost:5001/admin")
     print("  📡 API REST de Productos: http://localhost:5001/api/products")
     print("=" * 60)
     print("Presiona CTRL + C para detener ambos servidores.\n")

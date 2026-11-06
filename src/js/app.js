@@ -10,23 +10,6 @@ const state = {
   selectedProduct: null
 };
 
-// Asynchronously sync with Python Backend if online
-async function syncWithBackend() {
-  try {
-    const res = await fetch('http://localhost:5001/api/products');
-    if (res.ok) {
-      const liveData = await res.json();
-      if (Array.isArray(liveData) && liveData.length > 0) {
-        state.products = liveData;
-        console.log(`[PEKES] Sincronizado con Backend Python SQLite: ${liveData.length} productos activos.`);
-        renderProducts();
-      }
-    }
-  } catch (err) {
-    console.log('[PEKES] Backend Python no detectado en puerto 5001; usando dataset local.');
-  }
-}
-
 // Utilities
 function formatCOP(val) {
   if (val === null || val === undefined || isNaN(val)) return 'N/A';
@@ -250,24 +233,6 @@ function initEvents() {
     });
   }
 
-  // Simulation switch for precio-pendiente
-  const toggleSwitch = document.getElementById('toggle-precio-pendiente');
-  if (toggleSwitch) {
-    toggleSwitch.addEventListener('change', (e) => {
-      state.isPrecioPendienteSimulated = e.target.checked;
-      const statusLabel = document.getElementById('precio-status-label');
-      if (statusLabel) {
-        statusLabel.textContent = state.isPrecioPendienteSimulated 
-          ? 'Activado: [precio-pendiente] (sin $0)' 
-          : 'Normal: Precios aprobados';
-      }
-      renderProducts();
-      if (state.selectedProduct) {
-        openProductModal(state.selectedProduct);
-      }
-    });
-  }
-
   // Modal close handlers
   document.getElementById('modal-close-btn')?.addEventListener('click', closeProductModal);
   document.getElementById('product-modal')?.addEventListener('click', (e) => {
@@ -302,6 +267,5 @@ function initEvents() {
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
   initEvents();
-  syncWithBackend();
   console.log('[PEKES Storefront] Ready with products loaded.');
 });
