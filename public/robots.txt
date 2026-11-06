@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pekes.shop/sitemap.xml

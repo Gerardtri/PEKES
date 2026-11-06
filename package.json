@@ -9,6 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "esbuild": "0.28.2",
     "vite": "^6.0.0"
+  },
+  "overrides": {
+    "esbuild": "0.28.2"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
