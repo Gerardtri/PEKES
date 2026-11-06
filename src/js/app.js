@@ -74,7 +74,7 @@ function trackWhatsAppClick(product, location = 'product_modal') {
   };
 
   console.log('[PEKES Analytics] Triggered click_whatsapp:', payload);
-  showToast(`📊 Evento "click_whatsapp" emitido hacia GA4 & Meta Pixel`, payload);
+  showToast(`Evento "click_whatsapp" emitido hacia GA4 & Meta Pixel`, payload);
 
   // Dispatch simulated custom event for theme listeners
   window.dispatchEvent(new CustomEvent('pekes:click_whatsapp', { detail: payload }));
@@ -524,7 +524,7 @@ function initPurrMode() {
     if (!isPurring) {
       startPurrSound();
       toggleBtn.classList.add('active');
-      if (textSpan) textSpan.textContent = 'Ronroneando ♪';
+      if (textSpan) textSpan.textContent = 'Ronroneando...';
     } else {
       stopPurrSound();
       toggleBtn.classList.remove('active');
@@ -540,7 +540,7 @@ function initPurrMode() {
   function spawnPawStamp(x, y) {
     const paw = document.createElement('div');
     paw.className = 'paw-stamp';
-    paw.textContent = '🐾';
+    paw.textContent = '·';
     paw.style.left = `${x}px`;
     paw.style.top = `${y}px`;
     paw.style.color = isPurring ? '#8269B2' : 'rgba(130, 105, 178, 0.45)';
@@ -646,5 +646,27 @@ function initCatPeeker() {
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
   initEvents();
+  initScrollReveal();
   console.log('[PEKES Storefront] Ready with products loaded.');
 });
+
+// Scroll Reveal — microinteraction de aparición progresiva
+function initScrollReveal() {
+  const targets = document.querySelectorAll(
+    '.pillar-card, .flow-step, .lifestyle-card, .faq-item, .section-head, .hero-content, .hero-visual'
+  );
+  targets.forEach(el => el.classList.add('reveal'));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  targets.forEach(el => observer.observe(el));
+}
