@@ -208,6 +208,35 @@ function openProductModal(product) {
 
 function closeProductModal() {
   const modal = document.getElementById('product-modal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Legal Modal Controllers
+function openLegalModal(tabKey = 'privacidad') {
+  const modal = document.getElementById('legal-modal');
+  if (!modal) return;
+
+  const targetPaneId = `pane-${tabKey}`;
+  
+  // Switch tab buttons
+  document.querySelectorAll('.legal-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-target') === targetPaneId);
+  });
+
+  // Switch panes
+  document.querySelectorAll('.legal-pane').forEach(pane => {
+    pane.classList.toggle('active', pane.id === targetPaneId);
+  });
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLegalModal() {
+  const modal = document.getElementById('legal-modal');
+  if (!modal) return;
   modal.classList.remove('active');
   document.body.style.overflow = '';
 }
@@ -233,13 +262,43 @@ function initEvents() {
     });
   }
 
-  // Modal close handlers
+  // Modal close handlers (Product)
   document.getElementById('modal-close-btn')?.addEventListener('click', closeProductModal);
   document.getElementById('product-modal')?.addEventListener('click', (e) => {
     if (e.target.id === 'product-modal') closeProductModal();
   });
+
+  // Legal Modal Triggers & Controls
+  document.querySelectorAll('.legal-trigger').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tab = trigger.getAttribute('data-legal') || 'privacidad';
+      openLegalModal(tab);
+    });
+  });
+
+  document.querySelectorAll('.legal-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetPane = btn.getAttribute('data-target');
+      document.querySelectorAll('.legal-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.legal-pane').forEach(pane => {
+        pane.classList.toggle('active', pane.id === targetPane);
+      });
+    });
+  });
+
+  document.getElementById('legal-close-btn')?.addEventListener('click', closeLegalModal);
+  document.getElementById('legal-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'legal-modal') closeLegalModal();
+  });
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeProductModal();
+    if (e.key === 'Escape') {
+      closeProductModal();
+      closeLegalModal();
+    }
   });
 
   // Header quick WhatsApp action

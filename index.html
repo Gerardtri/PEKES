@@ -281,12 +281,17 @@
 
         <div class="pillar-card" style="padding: 1.5rem;">
           <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Los productos tienen entrega inmediata?</h4>
-          <p style="font-size: 0.9rem; color: #6B6673;">Todos los productos se elaboran por encargo. El tiempo de despacho depende de la disponibilidad de fábrica y la programación del taller.</p>
+          <p style="font-size: 0.9rem; color: #6B6673;">Los gimnasios se elaboran artesanalmente bajo pedido en Triplex de Pino de 12 mm. El tiempo habitual de despacho es de 5 a 10 días hábiles según la programación de taller.</p>
         </div>
 
         <div class="pillar-card" style="padding: 1.5rem;">
-          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Los precios incluyen transporte e instalación en Cali?</h4>
-          <p style="font-size: 0.9rem; color: #6B6673;">Las condiciones de transporte e instalación en Cali para los combos de pared se confirman directamente en la conversación de WhatsApp según la zona y características del muro.</p>
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Cómo funciona la instalación y los envíos?</h4>
+          <p style="font-size: 0.9rem; color: #6B6673;">En Cali, los combos de pared incluyen el servicio de instalación técnica en tu muro. El costo de envío o transporte es asumido por el cliente. También despachamos a nivel nacional (no incluye instalación fuera de Cali).</p>
+        </div>
+
+        <div class="pillar-card" style="padding: 1.5rem;">
+          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.35rem;">¿Qué garantía tienen los productos?</h4>
+          <p style="font-size: 0.9rem; color: #6B6673;">Cuentas con 6 meses de garantía legal directa por defectos de fabricación o ensamble estructural en madera y componentes.</p>
         </div>
       </div>
     </div>
@@ -301,7 +306,8 @@
         <h4 style="color: var(--color-white); font-weight: 800;">PEKES</h4>
         <p>Para la vida que comparten. Mobiliario, gimnasios y experiencias para gatos y perros en Cali, Colombia.</p>
         <div style="margin-top: 1rem; font-size: 0.8rem; color: #886EAE;">
-          Atención personalizada: Lunes a Sábado · 9:00 am a 6:00 pm
+          Atención personalizada: Lunes a Sábado · 9:00 am a 6:00 pm<br />
+          Contacto oficial: pekespetshop2026@gmail.com
         </div>
       </div>
 
@@ -320,14 +326,15 @@
         <ul>
           <li><a href="#como-comprar">Pedidos y Entregas</a></li>
           <li><a href="#faq">Preguntas Frecuentes</a></li>
-          <li><a href="javascript:void(0)" onclick="alert('Borrador de Política de Privacidad y Tratamiento de Datos Personales (Ley 1581 de 2012) pendiente de validación por abogado de PEKES.')">Tratamiento de Datos</a></li>
-          <li><a href="javascript:void(0)" onclick="alert('Términos y Condiciones comerciales para ventas a distancia según Estatuto del Consumidor (Ley 1480 de 2011) en revisión legal.')">Términos y Condiciones</a></li>
+          <li><a href="javascript:void(0)" class="legal-trigger" data-legal="privacidad">Tratamiento de Datos</a></li>
+          <li><a href="javascript:void(0)" class="legal-trigger" data-legal="terminos">Términos y Condiciones</a></li>
+          <li><a href="javascript:void(0)" class="legal-trigger" data-legal="garantias">Envíos y Garantía (6 Meses)</a></li>
         </ul>
       </div>
     </div>
 
     <div class="container footer-bottom">
-      <div>&copy; 2026 PEKES Pet Shop. Todos los derechos reservados. Cali, Colombia.</div>
+      <div>&copy; 2026 PEKES Pet Shop · NIT / RUT 1006071451. Todos los derechos reservados. Cali, Colombia.</div>
       <div>Los precios publicados son informativos y se confirman por WhatsApp. Sin pasarela de pago activa.</div>
     </div>
   </footer>
@@ -393,6 +400,108 @@
             <div class="wa-preview-box" id="modal-wa-preview"></div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Modal Legal y Políticas de PEKES (Ley 1581 de 2012 & Ley 1480 de 2011)
+       ========================================================================== -->
+  <div class="modal-overlay" id="legal-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content legal-modal-content">
+      <button class="modal-close-btn" id="legal-close-btn" aria-label="Cerrar ventana legal">&times;</button>
+      
+      <div class="legal-header">
+        <span class="badge" style="margin-bottom: 0.5rem; display: inline-block;">Marco Legal Colombiano</span>
+        <h2 id="legal-modal-title">Políticas y Términos Comerciales</h2>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.25rem;">
+          PEKES Pet Shop · Identificación: Persona Natural RUT 1006071451 · Cali, Colombia
+        </p>
+      </div>
+
+      <!-- Navegación por pestañas legales -->
+      <div class="legal-nav-tabs" role="tablist">
+        <button class="legal-tab-btn active" data-target="pane-privacidad" role="tab">Tratamiento de Datos</button>
+        <button class="legal-tab-btn" data-target="pane-terminos" role="tab">Términos y Condiciones</button>
+        <button class="legal-tab-btn" data-target="pane-garantias" role="tab">Envíos, Instalación & Garantía</button>
+      </div>
+
+      <!-- Pestaña 1: Tratamiento de Datos (Ley 1581 de 2012) -->
+      <div class="legal-pane active" id="pane-privacidad" role="tabpanel">
+        <div class="legal-alert-box">
+          <strong>Protección de Datos Personales (Habeas Data):</strong> En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, PEKES garantiza la confidencialidad y el uso exclusivo de tus datos para la cotización, despacho y soporte de tu pedido.
+        </div>
+
+        <h3>1. Responsable del Tratamiento</h3>
+        <p>El responsable del tratamiento de los datos personales es la titularidad de <strong>PEKES Pet Shop</strong> (Persona Natural identificada con RUT No. <strong>1006071451</strong>), con domicilio principal en Santiago de Cali, Colombia. Canal oficial de atención de datos: <code>pekespetshop2026@gmail.com</code>.</p>
+
+        <h3>2. Datos que se recolectan</h3>
+        <p>Para la debida atención comercial, cotización y entrega física de los productos, PEKES podrá solicitar a través de WhatsApp o correo electrónico:</p>
+        <ul>
+          <li>Nombre y apellidos del comprador o persona autorizada para recibir.</li>
+          <li>Cédula de ciudadanía o NIT (para remisiones de entrega y facturación).</li>
+          <li>Dirección exacta de entrega y número de contacto telefónico / WhatsApp.</li>
+          <li>Correo electrónico para envío de constancias y garantías.</li>
+        </ul>
+        <p><strong>Nota de seguridad:</strong> PEKES no recolecta, procesa ni almacena números de tarjetas de crédito o contraseñas bancarias a través del sitio web.</p>
+
+        <h3>3. Finalidad de la recolección</h3>
+        <ul>
+          <li>Gestionar y dar respuesta a consultas comerciales y cotizaciones iniciadas por el usuario.</li>
+          <li>Coordinar el servicio de instalación técnica en la ciudad de Cali.</li>
+          <li>Despachar pedidos a nivel nacional mediante empresas transportadoras autorizadas.</li>
+          <li>Hacer seguimiento al servicio posventa y brindar cobertura de garantía directa de 6 meses.</li>
+        </ul>
+
+        <h3>4. Derechos del titular (Habeas Data)</h3>
+        <p>Conforme al artículo 8 de la Ley 1581 de 2012, el titular podrá en cualquier momento conocer, actualizar, rectificar o solicitar la supresión de sus datos personales enviando una comunicación al correo <code>pekespetshop2026@gmail.com</code> con el asunto "Habeas Data PEKES". El plazo de respuesta legal es de máximo 15 días hábiles.</p>
+      </div>
+
+      <!-- Pestaña 2: Términos y Condiciones (Ley 1480 de 2011) -->
+      <div class="legal-pane" id="pane-terminos" role="tabpanel">
+        <div class="legal-alert-box">
+          <strong>Modelo Catálogo a WhatsApp:</strong> Este sitio web opera como catálogo y vitrina virtual informativa. El acuerdo comercial definitivo y la confirmación del pago se realizan de mutuo acuerdo a través de WhatsApp.
+        </div>
+
+        <h3>1. Naturaleza del Sitio Web</h3>
+        <p>El portal web de PEKES tiene como función exhibir el catálogo de mobiliario felino, rascadores y accesorios. No cuenta con pasarela de pago automático ni cobros directos en línea. Toda transacción comercial se concreta de forma manual y personalizada por WhatsApp.</p>
+
+        <h3>2. Precios e Inventario</h3>
+        <p>Todos los precios se encuentran expresados en pesos colombianos (COP). Los precios exhibidos son orientativos; el valor final, disponibilidad de acabados y costos de transporte se confirman en la conversación de WhatsApp previa al pago. Los productos con etiqueta de precio pendiente se cotizan directamente a solicitud del usuario.</p>
+
+        <h3>3. Perfeccionamiento del Contrato de Compraventa</h3>
+        <p>La relación de compraventa a distancia (conforme al Estatuto del Consumidor - Ley 1480 de 2011) se perfecciona cuando el cliente confirma la referencia, características acordadas y efectúa el pago por los canales bancarios autorizados por PEKES.</p>
+
+        <h3>4. Derecho de Retracto (Art. 47 Ley 1480 de 2011)</h3>
+        <p>Para productos de catálogo estándar (no personalizados sobre medidas atípicas), el consumidor podrá ejercer el derecho de retracto dentro de los <strong>cinco (5) días hábiles</strong> siguientes a la entrega. El producto debe devolverse nuevo, sin uso por parte de la mascota y en su embalaje original. El costo de transporte de devolución es asumido por el comprador conforme a la legislación vigente.</p>
+      </div>
+
+      <!-- Pestaña 3: Envíos, Instalación & Garantía -->
+      <div class="legal-pane" id="pane-garantias" role="tabpanel">
+        <div class="legal-alert-box">
+          <strong>Transparencia en Envíos & Garantía:</strong> En Cali los combos de pared incluyen instalación técnica. El costo del flete/envío (local y nacional) es asumido por el cliente. Todos nuestros gimnasios cuentan con 6 meses de garantía.
+        </div>
+
+        <h3>1. Costos de Envío (Cali y Nacional)</h3>
+        <ul>
+          <li><strong>El envío lo asume el cliente:</strong> Tanto para entregas locales en Cali como para despachos al resto del país, el costo del transporte/flete corre por cuenta del comprador y se liquida según la dirección de entrega.</li>
+          <li><strong>Envíos Nacionales:</strong> Se realizan con empresas transportadoras legalmente autorizadas con guía de rastreo. El producto viaja debidamente embalado y protegido. <em>Los despachos fuera de Cali no incluyen servicio de instalación presencial.</em></li>
+        </ul>
+
+        <h3>2. Servicio de Instalación en Cali</h3>
+        <ul>
+          <li><strong>Combos de pared en Cali:</strong> La compra de combos modulares incluye el servicio técnico de instalación en muros estructurales (ladrillo, concreto o bloque).</li>
+          <li><strong>Zonas especiales:</strong> Sectores periféricos o de acceso especial en Cali pueden generar un valor adicional de viático técnico, informado y aprobado previamente por WhatsApp.</li>
+          <li><strong>Requisitos:</strong> El cliente debe garantizar que el muro seleccionado se encuentre despejado y libre de tuberías de agua o redes eléctricas.</li>
+        </ul>
+
+        <h3>3. Política de Garantía de 6 Meses</h3>
+        <p>PEKES otorga una <strong>garantía legal de seis (6) meses</strong> a partir de la fecha de entrega sobre todos sus gimnasios y mobiliario:</p>
+        <ul>
+          <li><strong>Qué cubre:</strong> Defectos de fabricación en el ensamble, desajustes estructurales del Triplex de Pino de 12 mm, fallas en la fijación de rascadores y defectos en domos acrílicos.</li>
+          <li><strong>Exclusiones:</strong> Daños por humedad o intemperie no techada, sobrepeso humano, manipulaciones o perforaciones no autorizadas, y el desgaste normal de la cabuya por el uso diario de rascado de las mascotas.</li>
+        </ul>
+        <p>Para activar una garantía, comunícate a nuestro WhatsApp o al correo <code>pekespetshop2026@gmail.com</code> adjuntando foto o video del producto y soporte de compra.</p>
       </div>
     </div>
   </div>
