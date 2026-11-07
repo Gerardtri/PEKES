@@ -46,7 +46,10 @@ function buildWhatsAppUrl(product, isPending) {
     ? '¿Me pueden confirmar su precio, disponibilidad y opciones de entrega?' 
     : '¿Me pueden confirmar su disponibilidad y las opciones de entrega?';
 
-  const productUrl = `${window.location.origin}/#producto-${product.id}`;
+  const origin = window.location.origin;
+  const isLocal = origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('file:');
+  const baseDomain = isLocal ? (window.PEKES_SITE_URL || 'https://www.pekes.shop') : origin;
+  const productUrl = `${baseDomain}/#producto-${product.id}`;
   
   const rawMessage = `Hola, PEKES. Estoy interesado en este producto:
 
@@ -201,8 +204,9 @@ function openProductModal(product) {
     includesBox.style.display = 'none';
   }
 
-  // Preview Message
-  document.getElementById('modal-wa-preview').textContent = rawMessage;
+  // Preview Message (opcional)
+  const previewBox = document.getElementById('modal-wa-preview');
+  if (previewBox) previewBox.textContent = rawMessage;
 
   // WhatsApp Button link
   const btnWa = document.getElementById('modal-btn-wa');

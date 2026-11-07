@@ -746,12 +746,6 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
             </svg>
             CONSULTAR Y COMPRAR POR WHATSAPP
           </a>
-
-          <!-- Vista previa del mensaje -->
-          <div>
-            <div class="wa-preview-label">Vista previa del mensaje preformateado:</div>
-            <div class="wa-preview-box" id="modal-wa-preview"></div>
-          </div>
         </div>
       </div>
     </div>
@@ -947,6 +941,7 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
   <script>
     window.PEKES_PRODUCTS = <?php echo json_encode($products, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
     window.PEKES_WHATSAPP = <?php echo json_encode($wa_number); ?>;
+    window.PEKES_SITE_URL = 'https://www.pekes.shop';
   </script>
 
   <script src="/assets/js/app.js"></script>
