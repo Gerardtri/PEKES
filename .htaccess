@@ -1,0 +1,87 @@
+# ==============================================================================
+# PEKES Pet Shop — Configuración Apache / LiteSpeed para Hostinger Single
+# ==============================================================================
+
+# 1. Seguridad Básica
+Options -Indexes
+ServerSignature Off
+
+# 2. Bloqueo de Archivos Sensibles y Bases de Datos
+<FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sqlite|db|env|json|md|py|pyc)|~)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Permitir archivos necesarios públicamente
+<Files "package.json">
+    Require all denied
+</Files>
+<Files "package-lock.json">
+    Require all denied
+</Files>
+<Files "start.py">
+    Require all denied
+</Files>
+<Files "database.sql">
+    Require all denied
+</Files>
+
+# 3. Cabeceras de Seguridad HTTP
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 4. Enrutamiento y URLs Amigables
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Forzar HTTPS en producción (Hostinger SSL)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} !^localhost [NC]
+    RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Rutas amigables del Administrador
+    RewriteRule ^admin/?$ admin/index.php [L,QSA]
+    RewriteRule ^admin/login/?$ admin/login.php [L,QSA]
+    RewriteRule ^admin/logout/?$ admin/logout.php [L,QSA]
+    RewriteRule ^admin/setup/?$ admin/setup.php [L,QSA]
+    RewriteRule ^admin/categories/?$ admin/categories.php [L,QSA]
+    RewriteRule ^admin/product-edit/?$ admin/product-edit.php [L,QSA]
+
+    # Rutas amigables de API
+    RewriteRule ^api/products/?$ api/products.php [L,QSA]
+    RewriteRule ^api/settings/?$ api/settings.php [L,QSA]
+</IfModule>
+
+# 5. Compresión GZIP / Deflate para Máximo Rendimiento
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# 6. Caché de Navegador para Assets Estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
