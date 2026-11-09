@@ -50,6 +50,17 @@ ServerSignature Off
     RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+    # Redirección de imágenes para compatibilidad con hosting compartido (si no hay symlinks)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^images/(.*)$ public/images/$1 [L]
+
+    # Fichas individuales de producto (URLs amigables / SEO)
+    RewriteRule ^producto/([a-z0-9-]+)/?$ producto.php?slug=$1 [L,QSA]
+
+    # Sitemap dinámico
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
     # Rutas amigables del Administrador
     RewriteRule ^admin/?$ admin/index.php [L,QSA]
     RewriteRule ^admin/login/?$ admin/login.php [L,QSA]

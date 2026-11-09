@@ -236,6 +236,203 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
   </section>
 
   <!-- ==========================================================================
+       Ticker Editorial de Valores de Marca
+       ========================================================================== -->
+  <div class="editorial-ticker" aria-hidden="true">
+    <div class="container editorial-ticker-inner">
+      <span>Madera de Pino Seleccionada</span>
+      <span class="ticker-sep">&bull;</span>
+      <span>Cabuya de Fique 100% Natural</span>
+      <span class="ticker-sep">&bull;</span>
+      <span>Fabricado Artesanalmente en Cali</span>
+      <span class="ticker-sep">&bull;</span>
+      <span>Bienestar Felino &amp; Interiorismo</span>
+      <span class="ticker-sep">&bull;</span>
+      <span>Atención Directa por WhatsApp</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Curaduría Editorial PEKES: Diseños Icónicos (Fable & MiaCara Inspired)
+       ========================================================================== -->
+  <section class="curated-section" id="destacados">
+    <div class="container">
+      <div class="curated-head">
+        <div class="curated-head-text">
+          <span class="brand-tag">Selección Destacada</span>
+          <h2>Piezas Icónicas para el Hogar</h2>
+        </div>
+        <a href="#catalogo" class="btn-secondary" style="font-size: 0.82rem; padding: 0.65rem 1.25rem;">
+          Ver Catálogo Completo &rarr;
+        </a>
+      </div>
+
+      <div class="curated-grid">
+        <!-- Pieza 1: SKY -->
+        <div class="curated-card">
+          <a href="/producto/gimnasio-sky" class="curated-media">
+            <span class="curated-tag">Piso · Torre</span>
+            <img src="/images/products/P16_SKY.jpeg" alt="Gimnasio Sky PEKES" loading="lazy" />
+          </a>
+          <div class="curated-body">
+            <h3 class="curated-title">Gimnasio Sky</h3>
+            <div class="curated-price">$278.000 COP</div>
+            <div class="curated-actions">
+              <a href="/producto/gimnasio-sky" class="btn-curated-detail">Ver Ficha Completa</a>
+              <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa el Gimnasio Sky ($278.000 COP) que vi en su selección destacada: https://pekes.shop/producto/gimnasio-sky. ¿Tienen disponibilidad para entrega en Cali?'); ?>" target="_blank" rel="noopener" class="btn-curated-wa" title="Consultar por WhatsApp" aria-label="Consultar Sky por WhatsApp">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pieza 2: HEFESTO -->
+        <div class="curated-card">
+          <a href="/producto/gimnasio-hefesto" class="curated-media">
+            <span class="curated-tag">Piso · Doble Domo</span>
+            <img src="/images/products/P35_HEFESTO.jpeg" alt="Gimnasio Hefesto PEKES" loading="lazy" />
+          </a>
+          <div class="curated-body">
+            <h3 class="curated-title">Gimnasio Hefesto</h3>
+            <div class="curated-price">$564.000 COP</div>
+            <div class="curated-actions">
+              <a href="/producto/gimnasio-hefesto" class="btn-curated-detail">Ver Ficha Completa</a>
+              <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa el Gimnasio Hefesto ($564.000 COP) que vi en su selección destacada: https://pekes.shop/producto/gimnasio-hefesto. ¿Tienen disponibilidad para entrega en Cali?'); ?>" target="_blank" rel="noopener" class="btn-curated-wa" title="Consultar por WhatsApp" aria-label="Consultar Hefesto por WhatsApp">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pieza 3: ZAFIRO -->
+        <div class="curated-card">
+          <a href="/producto/gimnasio-zafiro" class="curated-media">
+            <span class="curated-tag">Piso · Cesta Nido</span>
+            <img src="/images/products/P11_ZAFIRO.jpeg" alt="Gimnasio Zafiro PEKES" loading="lazy" />
+          </a>
+          <div class="curated-body">
+            <h3 class="curated-title">Gimnasio Zafiro</h3>
+            <div class="curated-price">$216.000 COP</div>
+            <div class="curated-actions">
+              <a href="/producto/gimnasio-zafiro" class="btn-curated-detail">Ver Ficha Completa</a>
+              <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa el Gimnasio Zafiro ($216.000 COP) que vi en su selección destacada: https://pekes.shop/producto/gimnasio-zafiro. ¿Tienen disponibilidad para entrega en Cali?'); ?>" target="_blank" rel="noopener" class="btn-curated-wa" title="Consultar por WhatsApp" aria-label="Consultar Zafiro por WhatsApp">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pieza 4: COMBO #1 DE PARED -->
+        <div class="curated-card">
+          <a href="/producto/gimnasio-pared-combo-1" class="curated-media">
+            <span class="curated-tag">Pared · Circuito Aéreo</span>
+            <img src="/images/products/P46_Combo_1.jpeg" alt="Combo 1 de Pared PEKES" loading="lazy" />
+          </a>
+          <div class="curated-body">
+            <h3 class="curated-title">Combo #1 de Pared</h3>
+            <div class="curated-price">$687.000 COP</div>
+            <div class="curated-actions">
+              <a href="/producto/gimnasio-pared-combo-1" class="btn-curated-detail">Ver Ficha Completa</a>
+              <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa el Combo #1 de Pared ($687.000 COP) que vi en su selección destacada: https://pekes.shop/producto/gimnasio-pared-combo-1. ¿Tienen disponibilidad para entrega en Cali?'); ?>" target="_blank" rel="noopener" class="btn-curated-wa" title="Consultar por WhatsApp" aria-label="Consultar Combo 1 por WhatsApp">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Manifiesto Editorial PEKES (Diseño · Bienestar · Conexión)
+       ========================================================================== -->
+  <section class="manifesto-section" id="manifiesto">
+    <div class="container manifesto-inner">
+      <span class="brand-tag">Filosofía PEKES</span>
+      <blockquote class="manifesto-quote">
+        "No diseñamos muebles para mascotas. Diseñamos piezas para hogares donde los animales <span>son familia</span>."
+      </blockquote>
+      <p class="manifesto-body">
+        Concebimos cada gimnasio y rascador como una extensión armónica de la arquitectura de tu espacio. Seleccionamos triplex de pino de primera calidad y cabuya de fique 100% natural sin tintes tóxicos, creando un territorio que satisface los instintos de altura, juego y refugio de tu gato mientras enriquece la calidez visual de tu sala o habitación.
+      </p>
+      <div class="manifesto-signature">
+        Diseño · Bienestar · Conexión · Cali, Colombia
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Los 4 Pilares del Bienestar Felino (Infografía Minimalista SVG)
+       ========================================================================== -->
+  <section class="wellness-section" id="bienestar">
+    <div class="container">
+      <div class="section-head" style="text-align: center; max-width: 650px; margin: 0 auto;">
+        <span class="section-tag">Fundamentos Etológicos</span>
+        <h2 class="section-title">El bienestar de tu gato, en sintonía con tu hogar</h2>
+        <p class="section-desc">Cada decisión de diseño en PEKES responde a la etología felina y a la durabilidad de los materiales nobles.</p>
+      </div>
+
+      <div class="wellness-grid">
+        <div class="wellness-card">
+          <span class="wellness-num">01 / ETOLOGÍA</span>
+          <div class="wellness-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h3>Territorio Vertical</h3>
+          <p>Los gatos experimentan calma y reducen el estrés cuando vigilan su entorno desde alturas estratégicas y refugios panorámicos.</p>
+        </div>
+
+        <div class="wellness-card">
+          <span class="wellness-num">02 / SALUD</span>
+          <div class="wellness-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 3a9 9 0 0 0 0 18v-9h9"></path>
+            </svg>
+          </div>
+          <h3>Fibras 100% Naturales</h3>
+          <p>Postes forrados en cabuya de fique natural de alto gramaje para satisfacer el instinto de marcaje y la salud de sus garras.</p>
+        </div>
+
+        <div class="wellness-card">
+          <span class="wellness-num">03 / ARQUITECTURA</span>
+          <div class="wellness-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+          </div>
+          <h3>Estética Integrada</h3>
+          <p>Maderas claras, domos transparentes y líneas sobrias que complementan el interiorismo sin saturar visualmente tu casa.</p>
+        </div>
+
+        <div class="wellness-card">
+          <span class="wellness-num">04 / ARTESANÍA</span>
+          <div class="wellness-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <h3>Hecho a Mano en Cali</h3>
+          <p>Fabricación artesanal local con ensambles reforzados, fijaciones de seguridad y asesoría directa personalizada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
        Pilares de Marca (Diseño, Bienestar, Conexión)
        ========================================================================== -->
   <section class="pillars-section" id="pilares">
@@ -561,6 +758,46 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
             <span class="lifestyle-label">Combo de Pared</span>
             <h4>Combo #21 — Integración en Esquina</h4>
             <p>Aprovechamiento tridimensional de esquinas con comedero elevado y casita domo superior.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Comunidad PEKES: Hogares Reales en Cali
+       ========================================================================== -->
+  <section class="community-section" id="comunidad">
+    <div class="container">
+      <div class="section-head" style="text-align: center; max-width: 650px; margin: 0 auto;">
+        <span class="section-tag">Comunidad PEKES</span>
+        <h2 class="section-title">Hogares y gatos reales en Cali</h2>
+        <p class="section-desc">Así disfrutan nuestros clientes y sus felinos las piezas PEKES en sus propios espacios.</p>
+      </div>
+
+      <div class="community-mosaic">
+        <div class="community-tile">
+          <img src="/images/products/P16_SKY.jpeg" alt="Gato en Torre Sky en sala de Cali" loading="lazy" />
+          <div class="community-overlay">
+            <span>Torre Sky · San Antonio, Cali</span>
+          </div>
+        </div>
+        <div class="community-tile">
+          <img src="/images/products/P11_ZAFIRO.jpeg" alt="Gato descansando en Gimnasio Zafiro" loading="lazy" />
+          <div class="community-overlay">
+            <span>Gimnasio Zafiro · Ciudad Jardín, Cali</span>
+          </div>
+        </div>
+        <div class="community-tile">
+          <img src="/images/products/P46_Combo_1.jpeg" alt="Circuito aéreo Combo 1 en pared" loading="lazy" />
+          <div class="community-overlay">
+            <span>Circuito Combo #1 · Granada, Cali</span>
+          </div>
+        </div>
+        <div class="community-tile">
+          <img src="/images/products/P66_Combo_21.jpeg" alt="Combo 21 instalado en apartamento" loading="lazy" />
+          <div class="community-overlay">
+            <span>Combo #21 en Esquina · Pance, Cali</span>
           </div>
         </div>
       </div>

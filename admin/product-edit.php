@@ -17,6 +17,7 @@ $is_edit = !empty($id);
 $product = [
     'id'            => '',
     'sku'           => '',
+    'slug'          => '',
     'name'          => '',
     'category'      => 'Gimnasios de piso',
     'stage'         => 1,
@@ -82,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name        = trim($_POST['name'] ?? '');
         $category    = trim($_POST['category'] ?? 'Gimnasios de piso');
         $sku         = trim($_POST['sku'] ?? '');
+        $slug_input  = trim($_POST['slug'] ?? '');
         $cat_price   = !empty($_POST['catalog_price']) ? (int)$_POST['catalog_price'] : null;
         $price_input = !empty($_POST['price']) ? (int)$_POST['price'] : null;
         $dimensions  = trim($_POST['dimensions'] ?? '');
@@ -144,21 +146,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($error)) {
+            // Generar slug si no se proporcionó
+            if (!empty($slug_input)) {
+                $slug = slugify($slug_input);
+            } else {
+                if (stripos($category, 'piso') !== false) {
+                    $slug = 'gimnasio-' . slugify($name);
+                } elseif (stripos($category, 'pared') !== false) {
+                    $num = preg_replace('/[^0-9]/', '', $name);
+                    $slug = 'gimnasio-pared-combo-' . ($num ?: slugify($name));
+                } elseif (stripos($category, 'rascador') !== false) {
+                    $slug = 'rascador-' . slugify($name);
+                } else {
+                    $slug = slugify($name);
+                }
+            }
+
             if ($is_edit) {
                 // Actualizar producto existente
                 if (empty($sku)) {
                     $sku = $product['sku'];
                 }
+                if (empty($slug) && !empty($product['slug'])) {
+                    $slug = $product['slug'];
+                }
 
                 $stmt = $db->prepare('
                     UPDATE products
-                    SET sku = ?, name = ?, category = ?, stage = ?, catalog_price = ?, price = ?,
+                    SET sku = ?, slug = ?, name = ?, category = ?, stage = ?, catalog_price = ?, price = ?,
                         dimensions = ?, image = ?, description = ?, includes = ?, is_render = ?,
                         is_pending = ?, is_active = ?, tags = ?, updated_at = CURRENT_TIMESTAMP
                     WHERE id = ?
                 ');
                 $stmt->execute([
-                    $sku, $name, $category, $stage, $cat_price, $price, $dimensions,
+                    $sku, $slug, $name, $category, $stage, $cat_price, $price, $dimensions,
                     $image_path, $description, $includes_json, $is_render, $is_pending,
                     $is_active, $tags_json, $id
                 ]);
@@ -166,6 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $success = 'Producto "' . e($name) . '" actualizado con éxito.';
                 // Refrescar datos
                 $product['sku']           = $sku;
+                $product['slug']          = $slug;
                 $product['name']          = $name;
                 $product['category']      = $category;
                 $product['stage']         = $stage;
@@ -187,19 +209,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 $new_id = slugify($name);
-                // Evitar ID repetido
-                $check = $db->prepare('SELECT id FROM products WHERE id = ?');
-                $check->execute([$new_id]);
+                // Evitar ID y Slug repetido
+                $check = $db->prepare('SELECT id FROM products WHERE id = ? OR slug = ?');
+                $check->execute([$new_id, $slug]);
                 if ($check->fetch()) {
                     $new_id .= '-' . time();
+                    $slug   .= '-' . time();
                 }
 
                 $stmt = $db->prepare('
-                    INSERT INTO products (id, sku, name, category, stage, catalog_price, price, dimensions, image, description, includes, is_render, is_pending, is_active, tags, page)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 99)
+                    INSERT INTO products (id, sku, slug, name, category, stage, catalog_price, price, dimensions, image, description, includes, is_render, is_pending, is_active, tags, page)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 99)
                 ');
                 $stmt->execute([
-                    $new_id, $sku, $name, $category, $stage, $cat_price, $price,
+                    $new_id, $sku, $slug, $name, $category, $stage, $cat_price, $price,
                     $dimensions, $image_path, $description, $includes_json,
                     $is_render, $is_pending, $is_active, $tags_json
                 ]);
@@ -333,10 +356,23 @@ if (isset($_GET['created'])) {
                 </select>
               </div>
 
+            <div class="form-row-2">
               <div class="form-group">
                 <label for="sku" class="form-label">SKU / Referencia</label>
                 <input type="text" id="sku" name="sku" class="admin-input" value="<?php echo e($product['sku']); ?>" placeholder="Auto-generado si se deja vacío">
                 <span class="form-help">Ej: PEK-PIS-016</span>
+              </div>
+
+              <div class="form-group">
+                <label for="slug" class="form-label">Slug SEO (URL amigable)</label>
+                <input type="text" id="slug" name="slug" class="admin-input" value="<?php echo e($product['slug']); ?>" placeholder="Ej: gimnasio-sky">
+                <span class="form-help">
+                  <?php if (!empty($product['slug'])): ?>
+                    Ficha pública: <a href="/producto/<?php echo e($product['slug']); ?>" target="_blank" style="color: var(--admin-primary); text-decoration: underline;">/producto/<?php echo e($product['slug']); ?> &nearr;</a>
+                  <?php else: ?>
+                    Se genera automáticamente según el nombre y categoría.
+                  <?php endif; ?>
+                </span>
               </div>
             </div>
 

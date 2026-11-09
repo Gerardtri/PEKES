@@ -10,7 +10,7 @@ define('SITE_TAGLINE',   'Para la vida que comparten');
 define('SITE_CITY',      'Cali, Colombia');
 define('SITE_EMAIL',     'pekespetshop2026@gmail.com');
 define('DEFAULT_WHATSAPP', '573215427745');
-define('SITE_OFFICIAL_URL', 'https://www.pekes.shop');
+define('SITE_OFFICIAL_URL', 'https://pekes.shop');
 
 // Moneda
 define('CURRENCY_SYMBOL', '$');

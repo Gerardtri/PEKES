@@ -86,6 +86,18 @@ function trackWhatsAppClick(product, location = 'product_modal') {
   window.dispatchEvent(new CustomEvent('pekes:click_whatsapp', { detail: payload }));
 }
 
+function getProductSlug(p) {
+  if (p.slug) return p.slug;
+  const name = (p.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  if ((p.category || '').includes('piso')) return 'gimnasio-' + name;
+  if ((p.category || '').includes('pared')) {
+    const num = (p.name || '').replace(/[^0-9]/g, '');
+    return 'gimnasio-pared-combo-' + (num || name);
+  }
+  if ((p.category || '').includes('Rascador')) return 'rascador-' + name;
+  return name;
+}
+
 // Render Products Grid
 function renderProducts() {
   const grid = document.getElementById('products-grid');
@@ -129,38 +141,44 @@ function renderProducts() {
       : `<span class="card-price">${formatCOP(p.price)}</span>`;
 
     const categoryBadge = p.category === 'Gimnasios de pared' ? 'Pared' : (p.category === 'Rascadores' ? 'Rascador' : 'Piso');
+    const slug = getProductSlug(p);
+    const { url: waUrl } = buildWhatsAppUrl(p, isPendingCard);
 
     return `
-      <article class="product-card" data-id="${p.id}" tabindex="0" role="button" aria-label="Ver detalles de ${p.name}">
-        <div class="card-img-container">
+      <article class="product-card" data-id="${p.id}">
+        <a href="/producto/${slug}" class="card-img-container" aria-label="Ver ficha completa de ${p.name}">
           <span class="card-badge">Por encargo</span>
           <span class="card-badge stage-badge">${categoryBadge}</span>
           <img src="${p.image}" alt="Gimnasio para gatos ${p.name}" loading="lazy" onerror="this.src='/images/logos/mascota.png'" />
-        </div>
+        </a>
         <div class="card-body">
           <span class="card-sku">${p.sku}</span>
-          <h3 class="card-title">${p.name}</h3>
+          <h3 class="card-title"><a href="/producto/${slug}">${p.name}</a></h3>
           <p class="card-dims">${p.dimensions || ''}</p>
           <div class="card-price-row">
             ${priceDisplay}
-            <span class="card-btn-view">Ver más &rarr;</span>
+          </div>
+          <div class="card-actions-row">
+            <a href="/producto/${slug}" class="card-btn-view">Ver Ficha &rarr;</a>
+            <a href="${waUrl}" target="_blank" rel="noopener" class="card-btn-wa" title="Consultar por WhatsApp" aria-label="Consultar ${p.name} por WhatsApp">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z" />
+              </svg>
+            </a>
           </div>
         </div>
       </article>
     `;
   }).join('');
 
-  // Attach card click handlers
-  grid.querySelectorAll('.product-card').forEach(card => {
-    const id = card.getAttribute('data-id');
-    const product = state.products.find(p => p.id === id);
-    if (!product) return;
-    card.addEventListener('click', () => openProductModal(product));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openProductModal(product);
-      }
+  // Attach card quick click handler if requested
+  grid.querySelectorAll('.card-btn-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.product-card');
+      const id = card?.getAttribute('data-id');
+      const product = state.products.find(p => p.id === id);
+      trackWhatsAppClick(product, 'catalog_card');
     });
   });
 }
@@ -685,6 +703,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initEvents();
+
+  // Redirección fluida de hashes antiguos (#producto-xxx) a las nuevas fichas SEO (/producto/slug)
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#producto-')) {
+    const legacyId = hash.replace('#producto-', '');
+    const found = state.products.find(p => p.id === legacyId);
+    if (found) {
+      const slug = getProductSlug(found);
+      window.location.href = '/producto/' + slug;
+      return;
+    }
+  }
+
   console.log('[PEKES Storefront] Ready with PHP backend. Products count:', state.products.length);
 });
 

@@ -1,25 +1,29 @@
-import { PRODUCTS } from '../data/products.js';
+/**
+ * PEKES Pet Shop — Frontend Application Logic (PHP + REST API Compatible)
+ * Totalmente autónomo sin dependencias de Node.js / Vite para Hostinger
+ */
 
 // Application State
 const state = {
-  products: PRODUCTS,
+  products: window.PEKES_PRODUCTS || [],
   activeFilter: 'all', // 'all', 'Gimnasios de piso', 'Gimnasios de pared', 'Rascadores'
   searchQuery: '',
   isPrecioPendienteSimulated: false,
-  whatsappNumber: '573215427745', // WhatsApp oficial provisto por PEKES
+  whatsappNumber: window.PEKES_WHATSAPP || '573215427745',
   selectedProduct: null
 };
 
 // Utilities
 function formatCOP(val) {
   if (val === null || val === undefined || isNaN(val)) return 'N/A';
-  return '$' + val.toLocaleString('es-CO');
+  return '$' + Number(val).toLocaleString('es-CO');
 }
 
 function showToast(message, payload) {
   const toast = document.getElementById('analytics-toast');
   const toastMsg = document.getElementById('toast-message');
   const toastCode = document.getElementById('toast-payload');
+  if (!toast || !toastMsg) return;
   
   toastMsg.textContent = message;
   if (payload) {
@@ -63,7 +67,7 @@ ${questionText}`;
   };
 }
 
-// Analytics Trigger (Simulating Shopify.analytics.publish and GA4/Meta event)
+// Analytics Trigger
 function trackWhatsAppClick(product, location = 'product_modal') {
   const isPending = state.isPrecioPendienteSimulated;
   const payload = {
@@ -77,35 +81,45 @@ function trackWhatsAppClick(product, location = 'product_modal') {
   };
 
   console.log('[PEKES Analytics] Triggered click_whatsapp:', payload);
-  showToast(`Evento "click_whatsapp" emitido hacia GA4 & Meta Pixel`, payload);
+  showToast('Evento "click_whatsapp" emitido hacia GA4 & Meta Pixel', payload);
 
-  // Dispatch simulated custom event for theme listeners
   window.dispatchEvent(new CustomEvent('pekes:click_whatsapp', { detail: payload }));
+}
+
+function getProductSlug(p) {
+  if (p.slug) return p.slug;
+  const name = (p.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  if ((p.category || '').includes('piso')) return 'gimnasio-' + name;
+  if ((p.category || '').includes('pared')) {
+    const num = (p.name || '').replace(/[^0-9]/g, '');
+    return 'gimnasio-pared-combo-' + (num || name);
+  }
+  if ((p.category || '').includes('Rascador')) return 'rascador-' + name;
+  return name;
 }
 
 // Render Products Grid
 function renderProducts() {
   const grid = document.getElementById('products-grid');
   const countBadge = document.getElementById('catalog-count');
+  if (!grid) return;
   
   let filtered = state.products.filter(p => {
-    // Category match
     if (state.activeFilter !== 'all' && p.category !== state.activeFilter) {
       return false;
     }
-    // Search match
     if (state.searchQuery.trim()) {
       const q = state.searchQuery.toLowerCase();
-      const matchName = p.name.toLowerCase().includes(q);
-      const matchDims = p.dimensions.toLowerCase().includes(q);
-      const matchSku = p.sku.toLowerCase().includes(q);
+      const matchName = (p.name || '').toLowerCase().includes(q);
+      const matchDims = (p.dimensions || '').toLowerCase().includes(q);
+      const matchSku  = (p.sku || '').toLowerCase().includes(q);
       return matchName || matchDims || matchSku;
     }
     return true;
   });
 
   if (countBadge) {
-    countBadge.textContent = `${filtered.length} productos`;
+    countBadge.textContent = `${filtered.length} productos disponibles`;
   }
 
   if (filtered.length === 0) {
@@ -121,42 +135,50 @@ function renderProducts() {
   const isPending = state.isPrecioPendienteSimulated;
 
   grid.innerHTML = filtered.map(p => {
-    const priceDisplay = isPending
+    const isPendingCard = isPending || p.is_pending;
+    const priceDisplay = isPendingCard
       ? `<span class="card-price pending">Precio por confirmar por WhatsApp</span>`
       : `<span class="card-price">${formatCOP(p.price)}</span>`;
 
     const categoryBadge = p.category === 'Gimnasios de pared' ? 'Pared' : (p.category === 'Rascadores' ? 'Rascador' : 'Piso');
+    const slug = getProductSlug(p);
+    const { url: waUrl } = buildWhatsAppUrl(p, isPendingCard);
 
     return `
-      <article class="product-card" data-id="${p.id}" tabindex="0" role="button" aria-label="Ver detalles de ${p.name}">
-        <div class="card-img-container">
+      <article class="product-card" data-id="${p.id}">
+        <a href="/producto/${slug}" class="card-img-container" aria-label="Ver ficha completa de ${p.name}">
           <span class="card-badge">Por encargo</span>
           <span class="card-badge stage-badge">${categoryBadge}</span>
-          <img src="${p.image}" alt="Gimnasio para gatos ${p.name}" loading="lazy" />
-        </div>
+          <img src="${p.image}" alt="Gimnasio para gatos ${p.name}" loading="lazy" onerror="this.src='/images/logos/mascota.png'" />
+        </a>
         <div class="card-body">
           <span class="card-sku">${p.sku}</span>
-          <h3 class="card-title">${p.name}</h3>
-          <p class="card-dims">${p.dimensions}</p>
+          <h3 class="card-title"><a href="/producto/${slug}">${p.name}</a></h3>
+          <p class="card-dims">${p.dimensions || ''}</p>
           <div class="card-price-row">
             ${priceDisplay}
-            <span class="card-btn-view">Ver más →</span>
+          </div>
+          <div class="card-actions-row">
+            <a href="/producto/${slug}" class="card-btn-view">Ver Ficha &rarr;</a>
+            <a href="${waUrl}" target="_blank" rel="noopener" class="card-btn-wa" title="Consultar por WhatsApp" aria-label="Consultar ${p.name} por WhatsApp">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z" />
+              </svg>
+            </a>
           </div>
         </div>
       </article>
     `;
   }).join('');
 
-  // Attach card click handlers
-  grid.querySelectorAll('.product-card').forEach(card => {
-    const id = card.getAttribute('data-id');
-    const product = state.products.find(p => p.id === id);
-    card.addEventListener('click', () => openProductModal(product));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openProductModal(product);
-      }
+  // Attach card quick click handler if requested
+  grid.querySelectorAll('.card-btn-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.product-card');
+      const id = card?.getAttribute('data-id');
+      const product = state.products.find(p => p.id === id);
+      trackWhatsAppClick(product, 'catalog_card');
     });
   });
 }
@@ -164,18 +186,22 @@ function renderProducts() {
 // Modal Logic
 function openProductModal(product) {
   state.selectedProduct = product;
-  const isPending = state.isPrecioPendienteSimulated;
+  const isPending = state.isPrecioPendienteSimulated || product.is_pending;
   const modal = document.getElementById('product-modal');
+  if (!modal) return;
   
   const { rawMessage, url } = buildWhatsAppUrl(product, isPending);
 
-  document.getElementById('modal-img').src = product.image;
-  document.getElementById('modal-img').alt = product.name;
+  const modalImg = document.getElementById('modal-img');
+  if (modalImg) {
+    modalImg.src = product.image;
+    modalImg.alt = product.name;
+  }
   document.getElementById('modal-title').textContent = product.name;
   document.getElementById('modal-sku').textContent = `SKU: ${product.sku}`;
   document.getElementById('modal-cat').textContent = product.category;
-  document.getElementById('modal-desc').textContent = product.description;
-  document.getElementById('modal-dims').textContent = product.dimensions;
+  document.getElementById('modal-desc').textContent = product.description || '';
+  document.getElementById('modal-dims').textContent = product.dimensions || '-';
 
   const priceValEl = document.getElementById('modal-price-val');
   if (isPending) {
@@ -186,23 +212,24 @@ function openProductModal(product) {
     priceValEl.className = 'modal-price-val';
   }
 
-  // Render includes checklist
+  // Includes list
   const includesList = document.getElementById('modal-includes-list');
+  const includesBox = document.getElementById('modal-includes-box');
   if (product.includes && product.includes.length > 0) {
-    document.getElementById('modal-includes-box').style.display = 'block';
+    includesBox.style.display = 'block';
     includesList.innerHTML = product.includes.map(item => `<li>${item}</li>`).join('');
   } else {
-    document.getElementById('modal-includes-box').style.display = 'none';
+    includesBox.style.display = 'none';
   }
 
   // Preview Message (opcional)
   const previewBox = document.getElementById('modal-wa-preview');
   if (previewBox) previewBox.textContent = rawMessage;
 
-  // Button link
+  // WhatsApp Button link
   const btnWa = document.getElementById('modal-btn-wa');
   btnWa.href = url;
-  btnWa.onclick = (e) => {
+  btnWa.onclick = () => {
     trackWhatsAppClick(product, 'product_modal');
   };
 
@@ -217,19 +244,17 @@ function closeProductModal() {
   document.body.style.overflow = '';
 }
 
-// Legal Modal Controllers
+// Legal Modal
 function openLegalModal(tabKey = 'privacidad') {
   const modal = document.getElementById('legal-modal');
   if (!modal) return;
 
   const targetPaneId = `pane-${tabKey}`;
   
-  // Switch tab buttons
   document.querySelectorAll('.legal-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-target') === targetPaneId);
   });
 
-  // Switch panes
   document.querySelectorAll('.legal-pane').forEach(pane => {
     pane.classList.toggle('active', pane.id === targetPaneId);
   });
@@ -245,93 +270,6 @@ function closeLegalModal() {
   document.body.style.overflow = '';
 }
 
-// Init Event Listeners
-function initEvents() {
-  // Category tabs
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      state.activeFilter = btn.getAttribute('data-category');
-      renderProducts();
-    });
-  });
-
-  // Search input
-  const searchInput = document.getElementById('search-input');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      state.searchQuery = e.target.value;
-      renderProducts();
-    });
-  }
-
-  // Modal close handlers (Product)
-  document.getElementById('modal-close-btn')?.addEventListener('click', closeProductModal);
-  document.getElementById('product-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'product-modal') closeProductModal();
-  });
-
-  // Legal Modal Triggers & Controls
-  document.querySelectorAll('.legal-trigger').forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      const tab = trigger.getAttribute('data-legal') || 'privacidad';
-      openLegalModal(tab);
-    });
-  });
-
-  document.querySelectorAll('.legal-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetPane = btn.getAttribute('data-target');
-      document.querySelectorAll('.legal-tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.querySelectorAll('.legal-pane').forEach(pane => {
-        pane.classList.toggle('active', pane.id === targetPane);
-      });
-    });
-  });
-
-  document.getElementById('legal-close-btn')?.addEventListener('click', closeLegalModal);
-  document.getElementById('legal-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'legal-modal') closeLegalModal();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeProductModal();
-      closeLegalModal();
-    }
-  });
-
-  // Header quick WhatsApp action
-  document.getElementById('btn-header-wa')?.addEventListener('click', () => {
-    trackWhatsAppClick(null, 'header_button');
-  });
-
-  // Floating WhatsApp action
-  document.getElementById('floating-wa-btn')?.addEventListener('click', () => {
-    trackWhatsAppClick(null, 'floating_button');
-  });
-
-  // Sticky header shadow
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('.site-header');
-    if (window.scrollY > 20) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-
-  // Hero Slider & Cat Peeker Controllers
-  initHeroSlider();
-  initCatPeeker();
-  initMichiQuiz();
-  initPurrMode();
-}
-
 // ==============================================================================
 // El Test Michi — Recomendador de Personalidad Felina
 // ==============================================================================
@@ -344,11 +282,7 @@ function initMichiQuiz() {
   const stepIndicator = document.getElementById('quiz-step-indicator');
   if (!step1 || !resultView) return;
 
-  let quizState = {
-    p1: null,
-    p2: null,
-    p3: null
-  };
+  let quizState = { p1: null, p2: null, p3: null };
 
   function setStep(stepNum) {
     step1.classList.toggle('active', stepNum === 1);
@@ -365,7 +299,6 @@ function initMichiQuiz() {
     }
   }
 
-  // Options click
   document.querySelectorAll('.quiz-option-card').forEach(btn => {
     btn.addEventListener('click', () => {
       const step = parseInt(btn.getAttribute('data-step') || '1', 10);
@@ -385,7 +318,6 @@ function initMichiQuiz() {
     });
   });
 
-  // Back buttons
   document.getElementById('quiz-back-to-1')?.addEventListener('click', () => setStep(1));
   document.getElementById('quiz-back-to-2')?.addEventListener('click', () => setStep(2));
   document.getElementById('quiz-restart-btn')?.addEventListener('click', () => {
@@ -429,25 +361,26 @@ function initMichiQuiz() {
     let product = state.products.find(p => p.sku === matchedSku) || state.products[0];
 
     const titleEl = document.getElementById('result-profile-title');
-    const descEl = document.getElementById('result-profile-desc');
-    const imgEl = document.getElementById('result-img');
-    const catEl = document.getElementById('result-category-pill');
-    const nameEl = document.getElementById('result-product-name');
-    const dimsEl = document.getElementById('result-product-dims');
+    const descEl  = document.getElementById('result-profile-desc');
+    const imgEl   = document.getElementById('result-img');
+    const catEl   = document.getElementById('result-category-pill');
+    const nameEl  = document.getElementById('result-product-name');
+    const dimsEl  = document.getElementById('result-product-dims');
     const priceEl = document.getElementById('result-product-price');
 
     if (titleEl) titleEl.textContent = profileTitle;
     if (descEl) descEl.textContent = profileDesc;
-    if (imgEl) {
+    if (imgEl && product) {
       imgEl.src = product.image;
       imgEl.alt = `Gimnasio recomendado ${product.name}`;
     }
-    if (catEl) catEl.textContent = product.category;
-    if (nameEl) nameEl.textContent = product.name;
-    if (dimsEl) dimsEl.textContent = product.dimensions;
-    if (priceEl) priceEl.textContent = formatCOP(product.price);
+    if (catEl && product) catEl.textContent = product.category;
+    if (nameEl && product) nameEl.textContent = product.name;
+    if (dimsEl && product) dimsEl.textContent = product.dimensions || '';
+    if (priceEl && product) priceEl.textContent = formatCOP(product.price);
 
-    const msg = `Hola, PEKES. Hice el Test Michi en su web y el perfil de mi gato fue "${profileTitle}". El gimnasio recomendado es:
+    if (product) {
+      const msg = `Hola, PEKES. Hice el Test Michi en su web y el perfil de mi gato fue "${profileTitle}". El gimnasio recomendado es:
 
 Producto: ${product.name}
 Referencia: ${product.sku}
@@ -455,18 +388,19 @@ Precio publicado: ${formatCOP(product.price)}
 
 ¿Me pueden confirmar disponibilidad, colores y opciones de entrega en Cali?`;
 
-    const waBtn = document.getElementById('result-wa-btn');
-    if (waBtn) {
-      waBtn.href = `https://wa.me/${state.whatsappNumber}?text=${encodeURIComponent(msg)}`;
-      waBtn.onclick = () => {
-        trackWhatsAppClick(product, 'michi_quiz_result');
-      };
+      const waBtn = document.getElementById('result-wa-btn');
+      if (waBtn) {
+        waBtn.href = `https://wa.me/${state.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+        waBtn.onclick = () => {
+          trackWhatsAppClick(product, 'michi_quiz_result');
+        };
+      }
     }
   }
 }
 
 // ==============================================================================
-// Modo Ronroneo (Web Audio Synthesis + Huellitas Interactivas)
+// Modo Ronroneo (Web Audio Synthesis)
 // ==============================================================================
 function initPurrMode() {
   const toggleBtn = document.getElementById('btn-purr-toggle');
@@ -555,13 +489,13 @@ function initPurrMode() {
   }
 }
 
-// Hero Banner Carousel Controller
+// Hero Carousel Slider
 function initHeroSlider() {
   const slides = document.querySelectorAll('.hero-slide');
-  const dots = document.querySelectorAll('.slider-dot');
+  const dots   = document.querySelectorAll('.slider-dot');
   const prevBtn = document.getElementById('hero-prev-btn');
   const nextBtn = document.getElementById('hero-next-btn');
-  const slider = document.getElementById('hero-slider');
+  const slider  = document.getElementById('hero-slider');
   if (!slides.length) return;
 
   let currentSlide = 0;
@@ -608,7 +542,6 @@ function initHeroSlider() {
     });
   });
 
-  // Clicking a slide opens the corresponding product modal
   slides.forEach(slide => {
     slide.addEventListener('click', () => {
       const pId = slide.getAttribute('data-product-id');
@@ -623,15 +556,14 @@ function initHeroSlider() {
   startAutoplay();
 }
 
-// Interactive Cat Mascot Peeker Controller
+// Interactive Cat Mascot Peeker
 function initCatPeeker() {
   const peeker = document.getElementById('cat-peeker');
   const bubble = document.getElementById('cat-bubble');
   const closeBtn = document.getElementById('cat-bubble-close');
-  const catChar = document.getElementById('cat-character-wrap');
+  const catChar  = document.getElementById('cat-character-wrap');
   if (!peeker || !bubble) return;
 
-  // Pop up speech bubble gracefully after 3.5 seconds
   setTimeout(() => {
     bubble.classList.add('active');
   }, 3500);
@@ -646,15 +578,7 @@ function initCatPeeker() {
   });
 }
 
-// App Launch
-document.addEventListener('DOMContentLoaded', () => {
-  renderProducts();
-  initEvents();
-  initScrollReveal();
-  console.log('[PEKES Storefront] Ready with products loaded.');
-});
-
-// Scroll Reveal — microinteraction de aparición progresiva
+// Scroll Reveal
 function initScrollReveal() {
   const targets = document.querySelectorAll(
     '.pillar-card, .flow-step, .lifestyle-card, .faq-item, .section-head, .hero-content, .hero-visual'
@@ -674,3 +598,124 @@ function initScrollReveal() {
 
   targets.forEach(el => observer.observe(el));
 }
+
+// Init Event Listeners
+function initEvents() {
+  // Category tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.activeFilter = btn.getAttribute('data-category');
+      renderProducts();
+    });
+  });
+
+  // Search input
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      renderProducts();
+    });
+  }
+
+  // Modal close handlers
+  document.getElementById('modal-close-btn')?.addEventListener('click', closeProductModal);
+  document.getElementById('product-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'product-modal') closeProductModal();
+  });
+
+  // Legal Modal Triggers
+  document.querySelectorAll('.legal-trigger').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tab = trigger.getAttribute('data-legal') || 'privacidad';
+      openLegalModal(tab);
+    });
+  });
+
+  document.querySelectorAll('.legal-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetPane = btn.getAttribute('data-target');
+      document.querySelectorAll('.legal-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.legal-pane').forEach(pane => {
+        pane.classList.toggle('active', pane.id === targetPane);
+      });
+    });
+  });
+
+  document.getElementById('legal-close-btn')?.addEventListener('click', closeLegalModal);
+  document.getElementById('legal-modal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'legal-modal') closeLegalModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeProductModal();
+      closeLegalModal();
+    }
+  });
+
+  // Header quick WhatsApp action
+  document.getElementById('btn-header-wa')?.addEventListener('click', () => {
+    trackWhatsAppClick(null, 'header_button');
+  });
+
+  // Floating WhatsApp action
+  document.getElementById('floating-wa-btn')?.addEventListener('click', () => {
+    trackWhatsAppClick(null, 'floating_button');
+  });
+
+  // Sticky header shadow
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('.site-header');
+    if (header) {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    }
+  });
+
+  // Initialize interactive features
+  initHeroSlider();
+  initCatPeeker();
+  initMichiQuiz();
+  initPurrMode();
+  initScrollReveal();
+}
+
+// App Launch
+document.addEventListener('DOMContentLoaded', () => {
+  // If products were not embedded in window, fetch them from PHP API
+  if (!state.products || state.products.length === 0) {
+    fetch('/api/products.php')
+      .then(r => r.json())
+      .then(data => {
+        state.products = data;
+        renderProducts();
+      })
+      .catch(err => {
+        console.error('Error loading products from API:', err);
+      });
+  } else {
+    renderProducts();
+  }
+
+  initEvents();
+
+  // Redirección fluida de hashes antiguos (#producto-xxx) a las nuevas fichas SEO (/producto/slug)
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#producto-')) {
+    const legacyId = hash.replace('#producto-', '');
+    const found = state.products.find(p => p.id === legacyId);
+    if (found) {
+      const slug = getProductSlug(found);
+      window.location.href = '/producto/' + slug;
+      return;
+    }
+  }
+
+  console.log('[PEKES Storefront] Ready with PHP backend. Products count:', state.products.length);
+});
+
