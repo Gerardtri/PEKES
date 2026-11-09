@@ -46,10 +46,9 @@ function buildWhatsAppUrl(product, isPending) {
     ? '¿Me pueden confirmar su precio, disponibilidad y opciones de entrega?' 
     : '¿Me pueden confirmar su disponibilidad y las opciones de entrega?';
 
-  const origin = window.location.origin;
-  const isLocal = origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('file:');
-  const baseDomain = isLocal ? (window.PEKES_SITE_URL || 'https://www.pekes.shop') : origin;
-  const productUrl = `${baseDomain}/#producto-${product.id}`;
+  const baseDomain = window.PEKES_SITE_URL || 'https://www.pekes.shop';
+  const slug = getProductSlug(product);
+  const productUrl = `${baseDomain}/producto/${slug}`;
   
   const rawMessage = `Hola, PEKES. Estoy interesado en este producto:
 
@@ -87,6 +86,7 @@ function trackWhatsAppClick(product, location = 'product_modal') {
 }
 
 function getProductSlug(p) {
+  if (!p) return '';
   if (p.slug) return p.slug;
   const name = (p.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   if ((p.category || '').includes('piso')) return 'gimnasio-' + name;
@@ -145,21 +145,27 @@ function renderProducts() {
     const { url: waUrl } = buildWhatsAppUrl(p, isPendingCard);
 
     return `
-      <article class="product-card" data-id="${p.id}">
-        <a href="/producto/${slug}" class="card-img-container" aria-label="Ver ficha completa de ${p.name}">
+      <article class="product-card" data-id="${p.id}" data-slug="${slug}">
+        <div class="card-img-container" role="button" tabindex="0" aria-label="Ver ficha completa de ${p.name}">
           <span class="card-badge">Por encargo</span>
           <span class="card-badge stage-badge">${categoryBadge}</span>
           <img src="${p.image}" alt="Gimnasio para gatos ${p.name}" loading="lazy" onerror="this.src='/images/logos/mascota.png'" />
-        </a>
+        </div>
         <div class="card-body">
           <span class="card-sku">${p.sku}</span>
-          <h3 class="card-title"><a href="/producto/${slug}">${p.name}</a></h3>
+          <h3 class="card-title">${p.name}</h3>
           <p class="card-dims">${p.dimensions || ''}</p>
           <div class="card-price-row">
             ${priceDisplay}
           </div>
           <div class="card-actions-row">
-            <a href="/producto/${slug}" class="card-btn-view">Ver Ficha &rarr;</a>
+            <button type="button" class="card-btn-view" data-action="view" aria-label="Ver ficha técnica de ${p.name}">
+              <span>Ver Ficha</span>
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
             <a href="${waUrl}" target="_blank" rel="noopener" class="card-btn-wa" title="Consultar por WhatsApp" aria-label="Consultar ${p.name} por WhatsApp">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                 <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z" />
@@ -170,56 +176,67 @@ function renderProducts() {
       </article>
     `;
   }).join('');
-
-  // Attach card quick click handler if requested
-  grid.querySelectorAll('.card-btn-wa').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const card = btn.closest('.product-card');
-      const id = card?.getAttribute('data-id');
-      const product = state.products.find(p => p.id === id);
-      trackWhatsAppClick(product, 'catalog_card');
-    });
-  });
 }
 
 // Modal Logic
 function openProductModal(product) {
+  if (!product) return;
   state.selectedProduct = product;
   const isPending = state.isPrecioPendienteSimulated || product.is_pending;
   const modal = document.getElementById('product-modal');
   if (!modal) return;
   
   const { rawMessage, url } = buildWhatsAppUrl(product, isPending);
+  const slug = getProductSlug(product);
 
   const modalImg = document.getElementById('modal-img');
   if (modalImg) {
     modalImg.src = product.image;
     modalImg.alt = product.name;
   }
-  document.getElementById('modal-title').textContent = product.name;
-  document.getElementById('modal-sku').textContent = `SKU: ${product.sku}`;
-  document.getElementById('modal-cat').textContent = product.category;
-  document.getElementById('modal-desc').textContent = product.description || '';
-  document.getElementById('modal-dims').textContent = product.dimensions || '-';
+  
+  const titleEl = document.getElementById('modal-title');
+  if (titleEl) titleEl.textContent = product.name;
+
+  const skuEl = document.getElementById('modal-sku');
+  if (skuEl) skuEl.textContent = `SKU: ${product.sku}`;
+
+  const catEl = document.getElementById('modal-cat');
+  if (catEl) catEl.textContent = product.category;
+
+  const descEl = document.getElementById('modal-desc');
+  if (descEl) descEl.textContent = product.description || '';
+
+  const dimsEl = document.getElementById('modal-dims');
+  if (dimsEl) dimsEl.textContent = product.dimensions || 'Dimensiones a medida. Consultar con asesor por WhatsApp.';
 
   const priceValEl = document.getElementById('modal-price-val');
-  if (isPending) {
-    priceValEl.textContent = 'Precio por confirmar por WhatsApp';
-    priceValEl.className = 'modal-price-val pending';
-  } else {
-    priceValEl.textContent = formatCOP(product.price);
-    priceValEl.className = 'modal-price-val';
+  if (priceValEl) {
+    if (isPending) {
+      priceValEl.textContent = 'Precio por confirmar por WhatsApp';
+      priceValEl.className = 'modal-price-val pending';
+    } else {
+      priceValEl.textContent = formatCOP(product.price);
+      priceValEl.className = 'modal-price-val';
+    }
   }
 
   // Includes list
   const includesList = document.getElementById('modal-includes-list');
   const includesBox = document.getElementById('modal-includes-box');
-  if (product.includes && product.includes.length > 0) {
-    includesBox.style.display = 'block';
-    includesList.innerHTML = product.includes.map(item => `<li>${item}</li>`).join('');
-  } else {
-    includesBox.style.display = 'none';
+  if (includesBox && includesList) {
+    if (product.includes && product.includes.length > 0) {
+      includesBox.style.display = 'block';
+      includesList.innerHTML = product.includes.map(item => `<li>${item}</li>`).join('');
+    } else {
+      includesBox.style.display = 'none';
+    }
+  }
+
+  // Direct permalink to individual SEO page
+  const permalinkEl = document.getElementById('modal-permalink');
+  if (permalinkEl) {
+    permalinkEl.href = '/producto/' + slug;
   }
 
   // Preview Message (opcional)
@@ -228,10 +245,12 @@ function openProductModal(product) {
 
   // WhatsApp Button link
   const btnWa = document.getElementById('modal-btn-wa');
-  btnWa.href = url;
-  btnWa.onclick = () => {
-    trackWhatsAppClick(product, 'product_modal');
-  };
+  if (btnWa) {
+    btnWa.href = url;
+    btnWa.onclick = () => {
+      trackWhatsAppClick(product, 'product_modal');
+    };
+  }
 
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -620,6 +639,47 @@ function initEvents() {
     });
   }
 
+  // Delegación de clics en la cuadrícula de productos (Abre ficha emergente al instante)
+  const grid = document.getElementById('products-grid');
+  if (grid) {
+    grid.addEventListener('click', (e) => {
+      // Si el clic fue directamente en el botón de WhatsApp rápido
+      const waBtn = e.target.closest('.card-btn-wa');
+      if (waBtn) {
+        const card = waBtn.closest('.product-card');
+        const id = card?.getAttribute('data-id');
+        const prod = state.products.find(p => p.id === id);
+        trackWhatsAppClick(prod, 'catalog_card');
+        return;
+      }
+
+      // Si el clic fue en la tarjeta, botón "Ver Ficha", imagen o título
+      const card = e.target.closest('.product-card');
+      if (card) {
+        e.preventDefault();
+        const id = card.getAttribute('data-id');
+        const slug = card.getAttribute('data-slug');
+        const prod = state.products.find(p => p.id === id || (slug && (p.slug === slug || getProductSlug(p) === slug)));
+        if (prod) {
+          openProductModal(prod);
+        }
+      }
+    });
+
+    grid.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const card = e.target.closest('.product-card');
+        if (card && !e.target.closest('.card-btn-wa')) {
+          e.preventDefault();
+          const id = card.getAttribute('data-id');
+          const slug = card.getAttribute('data-slug');
+          const prod = state.products.find(p => p.id === id || (slug && (p.slug === slug || getProductSlug(p) === slug)));
+          if (prod) openProductModal(prod);
+        }
+      }
+    });
+  }
+
   // Modal close handlers
   document.getElementById('modal-close-btn')?.addEventListener('click', closeProductModal);
   document.getElementById('product-modal')?.addEventListener('click', (e) => {
@@ -686,51 +746,56 @@ function initEvents() {
 }
 
 // App Launch
-document.addEventListener('DOMContentLoaded', () => {
-  // Si los productos no estaban incrustados en window, cargarlos desde el JSON o API
+document.addEventListener('DOMContentLoaded', async () => {
+  // Asegurar carga de los 59 productos en cualquier entorno
   if (!state.products || state.products.length === 0) {
-    fetch('/public/data/products.json')
-      .then(r => {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          state.products = data;
-          renderProducts();
-        } else {
-          throw new Error('Empty JSON catalog');
-        }
-      })
-      .catch(() => {
-        fetch('/api/products.php')
-          .then(r => r.json())
-          .then(data => {
-            state.products = data;
-            renderProducts();
-          })
-          .catch(err => {
-            console.error('Error loading products from API/JSON:', err);
-          });
-      });
+    if (window.PEKES_PRODUCTS && Array.isArray(window.PEKES_PRODUCTS) && window.PEKES_PRODUCTS.length > 0) {
+      state.products = window.PEKES_PRODUCTS;
+      renderProducts();
+    } else {
+      const endpoints = [
+        '/data/products.json',
+        '/public/data/products.json',
+        'data/products.json',
+        'public/data/products.json',
+        '/api/products.php'
+      ];
+      let loaded = false;
+      for (const ep of endpoints) {
+        try {
+          const r = await fetch(ep);
+          if (r.ok) {
+            const data = await r.json();
+            if (Array.isArray(data) && data.length > 0) {
+              state.products = data;
+              window.PEKES_PRODUCTS = data;
+              renderProducts();
+              loaded = true;
+              break;
+            }
+          }
+        } catch (_) {}
+      }
+      if (!loaded) {
+        console.warn('[PEKES Storefront] No se pudieron cargar productos vía fetch');
+      }
+    }
   } else {
     renderProducts();
   }
 
   initEvents();
 
-  // Redirección fluida de hashes antiguos (#producto-xxx) a las nuevas fichas SEO (/producto/slug)
+  // Si hay un hash (#producto-xxx), abrir directamente el modal correspondiente sin romper la pantalla
   const hash = window.location.hash;
   if (hash && hash.startsWith('#producto-')) {
     const legacyId = hash.replace('#producto-', '');
-    const found = state.products.find(p => p.id === legacyId);
+    const found = state.products.find(p => p.id === legacyId || getProductSlug(p) === legacyId);
     if (found) {
-      const slug = getProductSlug(found);
-      window.location.href = '/producto/' + slug;
-      return;
+      setTimeout(() => openProductModal(found), 150);
     }
   }
 
-  console.log('[PEKES Storefront] Ready with PHP backend. Products count:', state.products.length);
+  console.log('[PEKES Storefront] Ready with MiaCara Editorial design. Products count:', state.products.length);
 });
 

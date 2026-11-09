@@ -938,68 +938,73 @@ img {
 
 .product-card {
   background: var(--color-white);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform var(--t-slow), box-shadow var(--t-slow), border-color var(--t-slow);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
   position: relative;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-brand-violet-mid);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(26, 23, 38, 0.09);
+  border-color: rgba(130, 105, 178, 0.3);
 }
 
 .card-img-container {
   width: 100%;
-  aspect-ratio: 4/5;
-  background: var(--color-brand-violet-light);
+  aspect-ratio: 1 / 1;
+  background: #FBFBFA;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .card-img-container img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card:hover .card-img-container img {
-  transform: scale(1.05) translateY(-3px);
+  transform: scale(1.05);
 }
 
-/* Badges de tarjeta */
+/* Badges de tarjeta — Estilo MiaCara */
 .card-badge {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  background: rgba(26, 23, 38, 0.88);
-  backdrop-filter: blur(6px);
-  color: var(--color-white);
+  top: 0.85rem;
+  left: 0.85rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-rich-black);
   font-family: var(--font-heading);
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.22rem 0.65rem;
+  padding: 0.28rem 0.75rem;
   border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   z-index: 2;
 }
 
 .card-badge.stage-badge {
   left: auto;
-  right: 0.75rem;
-  background: var(--color-brand-violet);
-  box-shadow: 0 2px 10px rgba(130, 105, 178, 0.4);
+  right: 0.85rem;
+  background: rgba(130, 105, 178, 0.12);
+  color: var(--color-brand-violet);
+  border: 1px solid rgba(130, 105, 178, 0.25);
+  box-shadow: none;
 }
 
 .card-body {
@@ -3308,50 +3313,90 @@ img {
   }
 }
 
-/* Product Card Actions Row */
+/* Product Card Actions Row — MiaCara Architectural Aesthetic */
 .card-actions-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
 }
 
 .card-actions-row .card-btn-view {
   flex: 1;
-  text-align: center;
-  padding: 0.55rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.68rem 1rem;
   border-radius: var(--radius-full);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-rich-black);
+  background: var(--color-rich-black);
+  border: 1px solid var(--color-rich-black);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
   font-size: 0.78rem;
   font-weight: 700;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-actions-row .card-btn-view:hover {
   background: var(--color-brand-violet);
   color: #FFFFFF;
   border-color: var(--color-brand-violet);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(130, 105, 178, 0.3);
+}
+
+.card-actions-row .card-btn-view:active {
+  transform: translateY(0);
 }
 
 .card-btn-wa {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #25D366;
   color: #FFFFFF;
   text-decoration: none;
-  transition: transform 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
 }
 
 .card-btn-wa:hover {
-  transform: scale(1.08);
+  transform: scale(1.1);
   background: #20BD5A;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+.modal-permalink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-brand-violet);
+  text-decoration: none;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-full);
+  background: rgba(130, 105, 178, 0.08);
+  border: 1px solid rgba(130, 105, 178, 0.2);
+  transition: all 0.2s ease;
+  margin-top: 0.4rem;
+  text-align: center;
+}
+
+.modal-permalink:hover {
+  background: rgba(130, 105, 178, 0.16);
+  color: var(--color-brand-violet-dark);
+  transform: translateY(-1px);
 }
 
 .card-title a {

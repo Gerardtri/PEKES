@@ -719,21 +719,27 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
             $p_wa  = build_product_whatsapp_url($p, $wa_number);
             $p_cat_badge = ($p['category'] === 'Gimnasios de pared') ? 'Pared' : (($p['category'] === 'Rascadores') ? 'Rascador' : 'Piso');
         ?>
-          <article class="product-card" data-id="<?php echo e($p['id']); ?>" data-category="<?php echo e($p['category']); ?>">
-            <a href="<?php echo e($p_url); ?>" class="card-img-container" aria-label="Ver ficha completa de <?php echo e($p['name']); ?>">
+          <article class="product-card" data-id="<?php echo e($p['id']); ?>" data-category="<?php echo e($p['category']); ?>" data-slug="<?php echo e($p_slug); ?>">
+            <div class="card-img-container" tabindex="0" role="button" aria-label="Ver ficha de <?php echo e($p['name']); ?>">
               <span class="card-badge">Por encargo</span>
               <span class="card-badge stage-badge"><?php echo $p_cat_badge; ?></span>
               <img src="<?php echo e($p['image']); ?>" alt="Gimnasio para gatos <?php echo e($p['name']); ?>" loading="lazy" onerror="this.src='/images/logos/mascota.png'" />
-            </a>
+            </div>
             <div class="card-body">
               <span class="card-sku"><?php echo e($p['sku']); ?></span>
-              <h3 class="card-title"><a href="<?php echo e($p_url); ?>"><?php echo e($p['name']); ?></a></h3>
+              <h3 class="card-title"><?php echo e($p['name']); ?></h3>
               <p class="card-dims"><?php echo e($p['dimensions']); ?></p>
               <div class="card-price-row">
                 <span class="card-price"><?php echo format_cop($p['price']); ?></span>
               </div>
               <div class="card-actions-row">
-                <a href="<?php echo e($p_url); ?>" class="card-btn-view">Ver Ficha &rarr;</a>
+                <button type="button" class="card-btn-view" data-action="view" aria-label="Ver ficha técnica de <?php echo e($p['name']); ?>">
+                  <span>Ver Ficha</span>
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
                 <a href="<?php echo e($p_wa); ?>" target="_blank" rel="noopener" class="card-btn-wa" title="Consultar por WhatsApp" aria-label="Consultar <?php echo e($p['name']); ?> por WhatsApp">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                     <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/>
@@ -1038,6 +1044,15 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
                 d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z" />
             </svg>
             CONSULTAR Y COMPRAR POR WHATSAPP
+          </a>
+
+          <a href="#" class="modal-permalink" id="modal-permalink" target="_blank" rel="noopener">
+            <span>Ver página individual independiente de este producto</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
           </a>
         </div>
       </div>
