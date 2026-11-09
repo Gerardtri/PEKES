@@ -8,20 +8,7 @@ require_once __DIR__ . '/includes/functions.php';
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$db = get_db();
-$products = [];
-
-try {
-    $stmt = $db->query('
-        SELECT id, slug, name, image, updated_at, created_at
-        FROM products
-        WHERE is_active = 1 OR is_active IS NULL
-        ORDER BY stage ASC, page ASC, id ASC
-    ');
-    $products = $stmt->fetchAll();
-} catch (Exception $e) {
-    $products = [];
-}
+$products = get_all_products();
 
 $base_url = 'https://pekes.shop';
 

@@ -3363,3 +3363,143 @@ img {
 .card-title a:hover {
   color: var(--color-brand-violet);
 }
+
+/* ==========================================================================
+   MiaCara Architectural Editorial Styles
+   Clean, Scandinavian Luxury Aesthetic · Generous Whitespace · Pure Materials
+   ========================================================================== */
+
+.miacara-editorial-split {
+  padding: 5.5rem 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.miacara-editorial-split.reverse .miacara-split-grid {
+  direction: ltr;
+}
+
+.miacara-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.miacara-split-media {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: var(--color-sand);
+}
+
+.miacara-split-media img {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.miacara-split-media:hover img {
+  transform: scale(1.03);
+}
+
+.miacara-split-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.miacara-kicker {
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-brand-violet);
+}
+
+.miacara-title {
+  font-family: var(--font-heading);
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: var(--color-rich-black);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.miacara-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.miacara-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.btn-miacara-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.85rem;
+  border-radius: var(--radius-full);
+  background: var(--color-rich-black);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-miacara-primary:hover {
+  background: var(--color-brand-violet);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(130, 105, 178, 0.25);
+}
+
+.btn-miacara-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.5rem;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-rich-black);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-miacara-ghost:hover {
+  border-color: var(--color-brand-violet);
+  color: var(--color-brand-violet);
+}
+
+@media (max-width: 960px) {
+  .miacara-split-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .miacara-editorial-split.reverse .miacara-split-media {
+    order: -1;
+  }
+  .miacara-title {
+    font-size: 1.85rem;
+  }
+}

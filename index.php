@@ -12,27 +12,8 @@ $db = get_db();
 // 1. Obtener configuraciones de tienda
 $wa_number = get_setting('whatsapp_number', DEFAULT_WHATSAPP);
 
-// 2. Obtener productos activos
-$products = [];
-try {
-    $stmt = $db->query('
-        SELECT * FROM products
-        WHERE is_active = 1 OR is_active IS NULL
-        ORDER BY stage ASC, page ASC, id ASC
-    ');
-    $rows = $stmt->fetchAll();
-    foreach ($rows as $r) {
-        $p = $r;
-        $p['includes'] = !empty($p['includes']) ? json_decode($p['includes'], true) : [];
-        $p['tags']     = !empty($p['tags']) ? json_decode($p['tags'], true) : [];
-        $p['is_render']  = (bool)($p['is_render'] ?? 0);
-        $p['is_pending'] = (bool)($p['is_pending'] ?? 0);
-        $products[] = $p;
-    }
-} catch (Exception $e) {
-    // Si la BD estuviera vacía o en migración
-    $products = [];
-}
+// 2. Obtener productos activos (MySQL con respaldo autónomo a JSON)
+$products = get_all_products();
 
 // 3. Conteo de categorías
 $count_all = count($products);
@@ -671,6 +652,29 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
   </section>
 
   <!-- ==========================================================================
+       Capítulo Editorial 01 (Estilo MiaCara Split Banner)
+       "Tu sofá es tuyo... hasta que él decide lo contrario"
+       ========================================================================== -->
+  <section class="miacara-editorial-split">
+    <div class="container miacara-split-grid">
+      <div class="miacara-split-media">
+        <img src="/images/campaign/sofa_campana.jpg" alt="PEKES — Tu sofá es tuyo hasta que él decide lo contrario" loading="lazy" />
+      </div>
+      <div class="miacara-split-content">
+        <span class="miacara-kicker">Capítulo 01 · Hábitat en Armonía</span>
+        <h2 class="miacara-title">Tu sofá es tuyo... hasta que él decide lo contrario</h2>
+        <p class="miacara-text">
+          Convivir con un felino no significa renunciar a la belleza de tu mobiliario. En PEKES diseñamos gimnasios de suelo con postes robustos en cabuya 100% natural y plataformas acogedoras que satisfacen el estiramiento y rascado instintivo, preservando la tranquilidad de tu hogar en Cali.
+        </p>
+        <div class="miacara-actions">
+          <a href="#catalogo" class="btn-miacara-primary">Descubrir Gimnasios de Piso</a>
+          <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me gustaría recibir asesoría sobre qué gimnasio de piso se adapta mejor a los espacios de mi casa en Cali.'); ?>" target="_blank" rel="noopener" class="btn-miacara-ghost">Asesoría por WhatsApp &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
        Catálogo Comercial de Productos
        ========================================================================== -->
   <section class="catalog-section" id="catalogo">
@@ -707,9 +711,61 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
         <span style="font-size: 0.78rem; color: var(--color-brand-violet); font-weight: 600; font-family: var(--font-heading);">Envíos y entregas en Cali por coordinar</span>
       </div>
 
-      <!-- Cuadrícula de Productos -->
+      <!-- Cuadrícula de Productos (Pre-renderizada para indexación y carga inmediata) -->
       <div class="products-grid" id="products-grid">
-        <!-- Renderizado dinámico e instantáneo -->
+        <?php foreach ($products as $p): 
+            $p_slug = !empty($p['slug']) ? $p['slug'] : slugify($p['name']);
+            $p_url = '/producto/' . $p_slug;
+            $p_wa  = build_product_whatsapp_url($p, $wa_number);
+            $p_cat_badge = ($p['category'] === 'Gimnasios de pared') ? 'Pared' : (($p['category'] === 'Rascadores') ? 'Rascador' : 'Piso');
+        ?>
+          <article class="product-card" data-id="<?php echo e($p['id']); ?>" data-category="<?php echo e($p['category']); ?>">
+            <a href="<?php echo e($p_url); ?>" class="card-img-container" aria-label="Ver ficha completa de <?php echo e($p['name']); ?>">
+              <span class="card-badge">Por encargo</span>
+              <span class="card-badge stage-badge"><?php echo $p_cat_badge; ?></span>
+              <img src="<?php echo e($p['image']); ?>" alt="Gimnasio para gatos <?php echo e($p['name']); ?>" loading="lazy" onerror="this.src='/images/logos/mascota.png'" />
+            </a>
+            <div class="card-body">
+              <span class="card-sku"><?php echo e($p['sku']); ?></span>
+              <h3 class="card-title"><a href="<?php echo e($p_url); ?>"><?php echo e($p['name']); ?></a></h3>
+              <p class="card-dims"><?php echo e($p['dimensions']); ?></p>
+              <div class="card-price-row">
+                <span class="card-price"><?php echo format_cop($p['price']); ?></span>
+              </div>
+              <div class="card-actions-row">
+                <a href="<?php echo e($p_url); ?>" class="card-btn-view">Ver Ficha &rarr;</a>
+                <a href="<?php echo e($p_wa); ?>" target="_blank" rel="noopener" class="card-btn-wa" title="Consultar por WhatsApp" aria-label="Consultar <?php echo e($p['name']); ?> por WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.966.528 1.884.813 2.796.813h.005c3.179 0 5.767-2.587 5.767-5.766.001-3.182-2.587-5.768-5.772-5.768zm4.493 8.358c-.188.528-.962 1.014-1.393 1.047-.384.029-.868.044-2.613-.679-1.921-.796-3.14-2.756-3.234-2.883-.095-.128-.772-1.028-.772-1.959s.489-1.386.662-1.576c.174-.189.378-.236.504-.236.126 0 .252.002.362.007.116.006.27-.044.423.324.157.378.536 1.309.583 1.404.047.095.079.206.016.332-.063.127-.095.206-.189.317-.095.111-.2.247-.286.332-.095.095-.194.198-.083.388.111.19.493.813 1.057 1.316.726.647 1.339.847 1.528.942.19.095.3.079.412-.048.111-.127.475-.555.602-.745.127-.19.253-.159.427-.095.174.063 1.107.523 1.297.618.19.095.317.143.364.222.047.079.047.459-.141.987z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Capítulo Editorial 02 (Estilo MiaCara Split Banner)
+       "Porque su mundo merece lo mejor"
+       ========================================================================== -->
+  <section class="miacara-editorial-split reverse">
+    <div class="container miacara-split-grid">
+      <div class="miacara-split-content">
+        <span class="miacara-kicker">Capítulo 02 · Arquitectura Aérea</span>
+        <h2 class="miacara-title">Porque su mundo merece lo mejor</h2>
+        <p class="miacara-text">
+          Los gatos necesitan dominar las alturas para sentirse en paz. Nuestros circuitos aéreos de pared modulares, fabricados en triplex de pino de 12 mm con domos acrílicos panorámicos, transforman muros convencionales en piezas esculturales de bienestar felino e interiorismo contemporáneo.
+        </p>
+        <div class="miacara-actions">
+          <a href="#catalogo" class="btn-miacara-primary">Explorar Combos de Pared</a>
+          <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa conocer las opciones de circuitos aéreos de pared para instalar en mi apartamento en Cali.'); ?>" target="_blank" rel="noopener" class="btn-miacara-ghost">Consultar Instalación en Cali &rarr;</a>
+        </div>
+      </div>
+      <div class="miacara-split-media">
+        <img src="/images/campaign/mundo_campana.jpg" alt="PEKES — Porque su mundo merece lo mejor" loading="lazy" />
       </div>
     </div>
   </section>

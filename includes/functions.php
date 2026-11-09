@@ -81,6 +81,9 @@ function verify_csrf_token($token) {
 function get_setting($key, $default = '') {
     try {
         $db = get_db();
+        if (!$db) {
+            return $default;
+        }
         // Soporta tanto la columna setting_key (MySQL nuevo) como key (SQLite original)
         $stmt = $db->prepare('SELECT setting_value FROM settings WHERE setting_key = ? UNION SELECT value FROM settings WHERE key = ? LIMIT 1');
         $stmt->execute([$key, $key]);
@@ -89,7 +92,7 @@ function get_setting($key, $default = '') {
             $val = reset($row);
             return $val !== null ? $val : $default;
         }
-    } catch (Exception $ex) {
+    } catch (Throwable $ex) {
         // Fallback en caso de tabla no inicializada
     }
     return $default;
@@ -104,16 +107,13 @@ function get_setting($key, $default = '') {
 function set_setting($key, $value) {
     try {
         $db = get_db();
-        $stmt = $db->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = ?');
-        return $stmt->execute([$key, $value, $value]);
-    } catch (Exception $e) {
-        try {
-            // Fallback para SQLite
-            $stmt = $db->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
-            return $stmt->execute([$key, $value]);
-        } catch (Exception $e2) {
+        if (!$db) {
             return false;
         }
+        $stmt = $db->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = ?');
+        return $stmt->execute([$key, $value, $value]);
+    } catch (Throwable $e) {
+        return false;
     }
 }
 
@@ -147,6 +147,49 @@ function slugify($text) {
 }
 
 /**
+ * Retorna todos los productos del catálogo activo.
+ * Primero consulta MySQL; si la BD está vacía o no conectada, usa el respaldo public/data/products.json
+ * @return array
+ */
+function get_all_products() {
+    $products = [];
+    try {
+        $db = get_db();
+        if ($db) {
+            $stmt = $db->query('
+                SELECT * FROM products
+                WHERE is_active = 1 OR is_active IS NULL
+                ORDER BY stage ASC, page ASC, id ASC
+            ');
+            $rows = $stmt->fetchAll();
+            if (!empty($rows)) {
+                foreach ($rows as $r) {
+                    $p = $r;
+                    $p['includes'] = !empty($p['includes']) ? (is_array($p['includes']) ? $p['includes'] : json_decode($p['includes'], true)) : [];
+                    $p['tags']     = !empty($p['tags']) ? (is_array($p['tags']) ? $p['tags'] : json_decode($p['tags'], true)) : [];
+                    $p['is_render']  = (bool)($p['is_render'] ?? 0);
+                    $p['is_pending'] = (bool)($p['is_pending'] ?? 0);
+                    $products[] = $p;
+                }
+                return $products;
+            }
+        }
+    } catch (Exception $e) {
+        // Fallback a JSON autónomo
+    }
+
+    $json_path = dirname(__DIR__) . '/public/data/products.json';
+    if (file_exists($json_path)) {
+        $data = json_decode(file_get_contents($json_path), true);
+        if (is_array($data) && !empty($data)) {
+            return $data;
+        }
+    }
+
+    return $products;
+}
+
+/**
  * Genera el enlace de WhatsApp estructurado para un producto
  * @param array $product
  * @param string|null $wa_number
@@ -172,17 +215,27 @@ function build_product_whatsapp_url($product, $wa_number = null) {
 function get_product_by_slug($slug) {
     try {
         $db = get_db();
-        $stmt = $db->prepare('SELECT * FROM products WHERE slug = ? LIMIT 1');
-        $stmt->execute([$slug]);
-        $row = $stmt->fetch();
-        if ($row) {
-            $row['includes'] = !empty($row['includes']) ? json_decode($row['includes'], true) : [];
-            $row['tags']     = !empty($row['tags']) ? json_decode($row['tags'], true) : [];
-            return $row;
+        if ($db) {
+            $stmt = $db->prepare('SELECT * FROM products WHERE slug = ? LIMIT 1');
+            $stmt->execute([$slug]);
+            $row = $stmt->fetch();
+            if ($row) {
+                $row['includes'] = !empty($row['includes']) ? (is_array($row['includes']) ? $row['includes'] : json_decode($row['includes'], true)) : [];
+                $row['tags']     = !empty($row['tags']) ? (is_array($row['tags']) ? $row['tags'] : json_decode($row['tags'], true)) : [];
+                return $row;
+            }
         }
     } catch (Exception $e) {
-        // Retorna null si falla
+        // Fallback a JSON
     }
+
+    $all = get_all_products();
+    foreach ($all as $item) {
+        if (($item['slug'] ?? '') === $slug || slugify($item['name'] ?? '') === $slug) {
+            return $item;
+        }
+    }
+
     return null;
 }
 
@@ -196,17 +249,31 @@ function get_product_by_slug($slug) {
 function get_related_products($category, $current_id, $limit = 4) {
     try {
         $db = get_db();
-        $stmt = $db->prepare('SELECT * FROM products WHERE category = ? AND id != ? AND (is_active = 1 OR is_active IS NULL) ORDER BY page ASC, id ASC LIMIT ' . (int)$limit);
-        $stmt->execute([$category, $current_id]);
-        $rows = $stmt->fetchAll();
-        foreach ($rows as &$r) {
-            $r['includes'] = !empty($r['includes']) ? json_decode($r['includes'], true) : [];
-            $r['tags']     = !empty($r['tags']) ? json_decode($r['tags'], true) : [];
+        if ($db) {
+            $stmt = $db->prepare('SELECT * FROM products WHERE category = ? AND id != ? AND (is_active = 1 OR is_active IS NULL) ORDER BY page ASC, id ASC LIMIT ' . (int)$limit);
+            $stmt->execute([$category, $current_id]);
+            $rows = $stmt->fetchAll();
+            if (!empty($rows)) {
+                foreach ($rows as &$r) {
+                    $r['includes'] = !empty($r['includes']) ? (is_array($r['includes']) ? $r['includes'] : json_decode($r['includes'], true)) : [];
+                    $r['tags']     = !empty($r['tags']) ? (is_array($r['tags']) ? $r['tags'] : json_decode($r['tags'], true)) : [];
+                }
+                return $rows;
+            }
         }
-        return $rows;
     } catch (Exception $e) {
-        return [];
+        // Fallback
     }
+
+    $all = get_all_products();
+    $related = [];
+    foreach ($all as $item) {
+        if ($item['category'] === $category && $item['id'] !== $current_id) {
+            $related[] = $item;
+            if (count($related) >= $limit) break;
+        }
+    }
+    return $related;
 }
 
 

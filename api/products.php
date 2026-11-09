@@ -117,9 +117,29 @@ if ($method === 'GET') {
 
     $query .= ' ORDER BY stage ASC, page ASC, id ASC';
 
-    $stmt = $db->prepare($query);
-    $stmt->execute($params);
-    $rows = $stmt->fetchAll();
+    $rows = [];
+    try {
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+        $rows = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $rows = [];
+    }
+
+    if (empty($rows)) {
+        $all_items = get_all_products();
+        $filtered = array_filter($all_items, function($p) use ($category, $search, $stage) {
+            if (!empty($category) && $category !== 'all' && ($p['category'] ?? '') !== $category) return false;
+            if (!empty($stage) && is_numeric($stage) && ($p['stage'] ?? 1) !== (int)$stage) return false;
+            if (!empty($search)) {
+                $term = mb_strtolower($search);
+                $haystack = mb_strtolower(($p['name'] ?? '') . ' ' . ($p['sku'] ?? '') . ' ' . ($p['dimensions'] ?? '') . ' ' . ($p['description'] ?? ''));
+                if (strpos($haystack, $term) === false) return false;
+            }
+            return true;
+        });
+        json_response(array_values(array_map('format_product_row', $filtered)));
+    }
 
     $products = array_map('format_product_row', $rows);
     json_response($products);

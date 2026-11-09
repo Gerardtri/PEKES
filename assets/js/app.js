@@ -687,16 +687,31 @@ function initEvents() {
 
 // App Launch
 document.addEventListener('DOMContentLoaded', () => {
-  // If products were not embedded in window, fetch them from PHP API
+  // Si los productos no estaban incrustados en window, cargarlos desde el JSON o API
   if (!state.products || state.products.length === 0) {
-    fetch('/api/products.php')
-      .then(r => r.json())
-      .then(data => {
-        state.products = data;
-        renderProducts();
+    fetch('/public/data/products.json')
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
       })
-      .catch(err => {
-        console.error('Error loading products from API:', err);
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          state.products = data;
+          renderProducts();
+        } else {
+          throw new Error('Empty JSON catalog');
+        }
+      })
+      .catch(() => {
+        fetch('/api/products.php')
+          .then(r => r.json())
+          .then(data => {
+            state.products = data;
+            renderProducts();
+          })
+          .catch(err => {
+            console.error('Error loading products from API/JSON:', err);
+          });
       });
   } else {
     renderProducts();
