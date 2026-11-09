@@ -501,3 +501,4 @@ $related_products = get_related_products($product['category'], $product['id'], 4
 
 </body>
 </html>
+

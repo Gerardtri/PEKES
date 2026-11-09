@@ -17,3 +17,4 @@ Disallow: /*.json$
 
 # Mapa del Sitio Oficial
 Sitemap: https://pekes.shop/sitemap.xml
+
