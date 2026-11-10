@@ -938,68 +938,73 @@ img {
 
 .product-card {
   background: var(--color-white);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform var(--t-slow), box-shadow var(--t-slow), border-color var(--t-slow);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
   position: relative;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-brand-violet-mid);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(26, 23, 38, 0.09);
+  border-color: rgba(130, 105, 178, 0.3);
 }
 
 .card-img-container {
   width: 100%;
-  aspect-ratio: 4/5;
-  background: var(--color-brand-violet-light);
+  aspect-ratio: 1 / 1;
+  background: #FBFBFA;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .card-img-container img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card:hover .card-img-container img {
-  transform: scale(1.05) translateY(-3px);
+  transform: scale(1.05);
 }
 
-/* Badges de tarjeta */
+/* Badges de tarjeta — Estilo MiaCara */
 .card-badge {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  background: rgba(26, 23, 38, 0.88);
-  backdrop-filter: blur(6px);
-  color: var(--color-white);
+  top: 0.85rem;
+  left: 0.85rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-rich-black);
   font-family: var(--font-heading);
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.22rem 0.65rem;
+  padding: 0.28rem 0.75rem;
   border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   z-index: 2;
 }
 
 .card-badge.stage-badge {
   left: auto;
-  right: 0.75rem;
-  background: var(--color-brand-violet);
-  box-shadow: 0 2px 10px rgba(130, 105, 178, 0.4);
+  right: 0.85rem;
+  background: rgba(130, 105, 178, 0.12);
+  color: var(--color-brand-violet);
+  border: 1px solid rgba(130, 105, 178, 0.25);
+  box-shadow: none;
 }
 
 .card-body {
@@ -2473,4 +2478,1073 @@ img {
   .hero-slider { padding: 0.85rem; }
   .modal-gallery { border-radius: var(--radius-xl) var(--radius-xl) 0 0; padding: 1.75rem 1rem; }
   .btn-purr-toggle { display: none; }
+}
+
+
+/* ==========================================================================
+   PEKES — Ficha Individual de Producto (PDP) Styles
+   Inspired by Fable Pets & MiaCara · Editorial & High-End Pet Lifestyle
+   ========================================================================== */
+
+.pdp-body {
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  min-height: 100vh;
+}
+
+.pdp-breadcrumbs-wrapper {
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 1rem 0;
+}
+
+.pdp-breadcrumbs-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pdp-breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.pdp-breadcrumbs a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.pdp-breadcrumbs a:hover {
+  color: var(--color-brand-violet);
+}
+
+.pdp-breadcrumbs .sep {
+  color: var(--color-border);
+  font-size: 0.75rem;
+}
+
+.pdp-breadcrumbs .current {
+  color: var(--color-rich-black);
+  font-weight: 600;
+}
+
+.pdp-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-brand-violet);
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.pdp-back-link:hover {
+  transform: translateX(-3px);
+}
+
+.pdp-main-section {
+  padding: 3rem 0 5rem;
+}
+
+.pdp-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+/* Gallery Column */
+.pdp-gallery-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pdp-image-stage {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.pdp-main-image {
+  max-width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.pdp-image-stage:hover .pdp-main-image {
+  transform: scale(1.03);
+}
+
+.pdp-image-badge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-rich-black);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-xs);
+}
+
+.pdp-image-badge .badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-brand-violet);
+}
+
+/* Craft Highlights */
+.pdp-craft-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.craft-item {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.craft-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand-violet-light);
+  color: var(--color-brand-violet);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.craft-text strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-rich-black);
+  margin-bottom: 0.2rem;
+}
+
+.craft-text span {
+  display: block;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+/* Info Column & Sticky Card */
+.pdp-info-col {
+  position: sticky;
+  top: 6rem;
+}
+
+.pdp-info-card {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pdp-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pdp-category-pill {
+  background: var(--color-brand-violet-light);
+  color: var(--color-brand-violet-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+.pdp-sku-pill,
+.pdp-status-pill {
+  background: var(--color-sand);
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.pdp-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--color-rich-black);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.pdp-price-panel {
+  background: var(--color-bone);
+  border-left: 3px solid var(--color-brand-violet);
+  padding: 1rem 1.25rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.pdp-price-caption {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.pdp-price-amount {
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--color-brand-violet);
+  letter-spacing: -0.02em;
+}
+
+.pdp-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.pdp-specs-box,
+.pdp-includes-box {
+  background: var(--color-bone);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.specs-title {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-rich-black);
+  margin: 0 0 0.85rem 0;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.45rem 0;
+  font-size: 0.82rem;
+  border-bottom: 1px dashed var(--color-border-subtle);
+}
+
+.spec-row:last-child {
+  border-bottom: none;
+}
+
+.spec-label {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.spec-value {
+  color: var(--color-rich-black);
+  font-weight: 600;
+  text-align: right;
+  max-width: 65%;
+}
+
+.pdp-includes-box .includes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pdp-includes-box .includes-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--color-rich-black);
+  line-height: 1.45;
+}
+
+/* Master WhatsApp Button */
+.pdp-cta-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.btn-pdp-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #25D366 0%, #1EBE5D 100%);
+  color: #FFFFFF;
+  padding: 1.15rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(37, 211, 102, 0.28);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-pdp-wa:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(37, 211, 102, 0.38);
+  background: linear-gradient(135deg, #20BD5A 0%, #17A34E 100%);
+}
+
+.pdp-cta-guarantee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.pdp-cta-guarantee svg {
+  color: var(--color-brand-violet);
+}
+
+/* Accordions */
+.pdp-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.pdp-accordion-item {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.accordion-header {
+  padding: 0.85rem 1.1rem;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-rich-black);
+  background: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.accordion-header::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-arrow {
+  font-size: 1.1rem;
+  color: var(--color-brand-violet);
+  transition: transform 0.2s ease;
+}
+
+.pdp-accordion-item[open] .accordion-arrow {
+  transform: rotate(90deg);
+}
+
+.accordion-content {
+  padding: 0.85rem 1.1rem;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  background: var(--color-bone);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* Related Products Section */
+.pdp-related-section {
+  padding: 4.5rem 0;
+  background: #FFFFFF;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.related-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.related-title {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--color-rich-black);
+  letter-spacing: -0.02em;
+  margin-top: 0.5rem;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem;
+}
+
+.btn-card-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-brand-violet);
+  background: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-card-view:hover {
+  background: var(--color-brand-violet);
+  color: #FFFFFF;
+  border-color: var(--color-brand-violet);
+}
+
+/* ==========================================================================
+   PEKES — Home Redesign Styles (Editorial Commerce: Fable + MiaCara)
+   ========================================================================== */
+
+/* Brand Ticker */
+.editorial-ticker {
+  background: var(--color-rich-black);
+  color: #FFFFFF;
+  padding: 0.85rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.editorial-ticker-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticker-sep {
+  color: var(--color-brand-violet);
+}
+
+/* Curated Editorial Section */
+.curated-section {
+  padding: 5rem 0;
+  background: #FFFFFF;
+}
+
+.curated-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+}
+
+.curated-head-text h2 {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--color-rich-black);
+  margin-top: 0.4rem;
+}
+
+.curated-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.curated-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bone);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-border-subtle);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.curated-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-brand-violet-mid);
+}
+
+.curated-media {
+  position: relative;
+  background: #FFFFFF;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+}
+
+.curated-media img {
+  max-height: 210px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.curated-card:hover .curated-media img {
+  transform: scale(1.05);
+}
+
+.curated-tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--color-sand);
+  color: var(--color-text-main);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.curated-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.curated-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-rich-black);
+  margin: 0;
+}
+
+.curated-price {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-brand-violet);
+}
+
+.curated-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.btn-curated-detail {
+  flex: 1;
+  text-align: center;
+  padding: 0.65rem;
+  border-radius: var(--radius-full);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  color: var(--color-rich-black);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-curated-detail:hover {
+  background: var(--color-brand-violet);
+  color: #FFFFFF;
+  border-color: var(--color-brand-violet);
+}
+
+.btn-curated-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.btn-curated-wa:hover {
+  transform: scale(1.08);
+}
+
+/* Editorial Manifesto Section */
+.manifesto-section {
+  padding: 6.5rem 0;
+  background: var(--color-sand);
+  color: var(--color-rich-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.manifesto-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.manifesto-quote {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--color-rich-black);
+}
+
+.manifesto-quote span {
+  color: var(--color-brand-violet);
+}
+
+.manifesto-body {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #4A4656;
+}
+
+.manifesto-signature {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-brand-violet-dark);
+}
+
+/* Feline Wellness Pillars (4 Quadrants with Minimal SVG) */
+.wellness-section {
+  padding: 5.5rem 0;
+  background: #FFFFFF;
+}
+
+.wellness-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 3.5rem;
+}
+
+.wellness-card {
+  background: var(--color-bone);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.wellness-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-brand-violet-mid);
+}
+
+.wellness-num {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--color-brand-violet);
+  letter-spacing: 0.08em;
+}
+
+.wellness-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-violet-light);
+  color: var(--color-brand-violet);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wellness-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-rich-black);
+  margin: 0;
+}
+
+.wellness-card p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Community Editorial Mosaic */
+.community-section {
+  padding: 5.5rem 0;
+  background: var(--color-bg);
+}
+
+.community-mosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+
+.community-tile {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  min-height: 280px;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+}
+
+.community-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.community-tile:hover img {
+  transform: scale(1.06);
+}
+
+.community-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem 1rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 13, 18, 0.8) 100%);
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .curated-grid,
+  .wellness-grid,
+  .community-mosaic {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .manifesto-quote {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .editorial-ticker-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+  }
+  .ticker-sep {
+    display: none;
+  }
+  .curated-grid,
+  .wellness-grid,
+  .community-mosaic {
+    grid-template-columns: 1fr;
+  }
+  .manifesto-quote {
+    font-size: 1.55rem;
+  }
+}
+
+/* Product Card Actions Row — MiaCara Architectural Aesthetic */
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+
+.card-actions-row .card-btn-view {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.68rem 1rem;
+  border-radius: var(--radius-full);
+  background: var(--color-rich-black);
+  border: 1px solid var(--color-rich-black);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-actions-row .card-btn-view:hover {
+  background: var(--color-brand-violet);
+  color: #FFFFFF;
+  border-color: var(--color-brand-violet);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(130, 105, 178, 0.3);
+}
+
+.card-actions-row .card-btn-view:active {
+  transform: translateY(0);
+}
+
+.card-btn-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #FFFFFF;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+}
+
+.card-btn-wa:hover {
+  transform: scale(1.1);
+  background: #20BD5A;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+.modal-permalink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-brand-violet);
+  text-decoration: none;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-full);
+  background: rgba(130, 105, 178, 0.08);
+  border: 1px solid rgba(130, 105, 178, 0.2);
+  transition: all 0.2s ease;
+  margin-top: 0.4rem;
+  text-align: center;
+}
+
+.modal-permalink:hover {
+  background: rgba(130, 105, 178, 0.16);
+  color: var(--color-brand-violet-dark);
+  transform: translateY(-1px);
+}
+
+.card-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.card-title a:hover {
+  color: var(--color-brand-violet);
+}
+
+/* ==========================================================================
+   MiaCara Architectural Editorial Styles
+   Clean, Scandinavian Luxury Aesthetic · Generous Whitespace · Pure Materials
+   ========================================================================== */
+
+.miacara-editorial-split {
+  padding: 5.5rem 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.miacara-editorial-split.reverse .miacara-split-grid {
+  direction: ltr;
+}
+
+.miacara-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.miacara-split-media {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: var(--color-sand);
+}
+
+.miacara-split-media img {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.miacara-split-media:hover img {
+  transform: scale(1.03);
+}
+
+.miacara-split-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.miacara-kicker {
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-brand-violet);
+}
+
+.miacara-title {
+  font-family: var(--font-heading);
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: var(--color-rich-black);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.miacara-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.miacara-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.btn-miacara-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.85rem;
+  border-radius: var(--radius-full);
+  background: var(--color-rich-black);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-miacara-primary:hover {
+  background: var(--color-brand-violet);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(130, 105, 178, 0.25);
+}
+
+.btn-miacara-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.5rem;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-rich-black);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-miacara-ghost:hover {
+  border-color: var(--color-brand-violet);
+  color: var(--color-brand-violet);
+}
+
+@media (max-width: 960px) {
+  .miacara-split-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .miacara-editorial-split.reverse .miacara-split-media {
+    order: -1;
+  }
+  .miacara-title {
+    font-size: 1.85rem;
+  }
 }

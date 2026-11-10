@@ -58,11 +58,24 @@ function format_product_row($row) {
 // GET: Consultar productos
 // -------------------------------------------------------------
 if ($method === 'GET') {
-    $id = isset($_GET['id']) ? trim($_GET['id']) : '';
+    $id   = isset($_GET['id']) ? trim($_GET['id']) : '';
+    $slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 
+    // Consulta por ID
     if (!empty($id)) {
         $stmt = $db->prepare('SELECT * FROM products WHERE id = ? LIMIT 1');
         $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            json_response(['error' => 'Producto no encontrado'], 404);
+        }
+        json_response(format_product_row($row));
+    }
+
+    // Consulta por Slug (URL amigable / SEO)
+    if (!empty($slug)) {
+        $stmt = $db->prepare('SELECT * FROM products WHERE slug = ? LIMIT 1');
+        $stmt->execute([$slug]);
         $row = $stmt->fetch();
         if (!$row) {
             json_response(['error' => 'Producto no encontrado'], 404);
@@ -104,9 +117,29 @@ if ($method === 'GET') {
 
     $query .= ' ORDER BY stage ASC, page ASC, id ASC';
 
-    $stmt = $db->prepare($query);
-    $stmt->execute($params);
-    $rows = $stmt->fetchAll();
+    $rows = [];
+    try {
+        $stmt = $db->prepare($query);
+        $stmt->execute($params);
+        $rows = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $rows = [];
+    }
+
+    if (empty($rows)) {
+        $all_items = get_all_products();
+        $filtered = array_filter($all_items, function($p) use ($category, $search, $stage) {
+            if (!empty($category) && $category !== 'all' && ($p['category'] ?? '') !== $category) return false;
+            if (!empty($stage) && is_numeric($stage) && ($p['stage'] ?? 1) !== (int)$stage) return false;
+            if (!empty($search)) {
+                $term = mb_strtolower($search);
+                $haystack = mb_strtolower(($p['name'] ?? '') . ' ' . ($p['sku'] ?? '') . ' ' . ($p['dimensions'] ?? '') . ' ' . ($p['description'] ?? ''));
+                if (strpos($haystack, $term) === false) return false;
+            }
+            return true;
+        });
+        json_response(array_values(array_map('format_product_row', $filtered)));
+    }
 
     $products = array_map('format_product_row', $rows);
     json_response($products);
@@ -134,12 +167,27 @@ if ($method === 'POST') {
         $sku = generate_sku($category);
     }
 
+    $slug = trim($input['slug'] ?? '');
+    if (empty($slug)) {
+        if (stripos($category, 'piso') !== false) {
+            $slug = 'gimnasio-' . slugify($name);
+        } elseif (stripos($category, 'pared') !== false) {
+            $num = preg_replace('/[^0-9]/', '', $name);
+            $slug = 'gimnasio-pared-combo-' . ($num ?: slugify($name));
+        } elseif (stripos($category, 'rascador') !== false) {
+            $slug = 'rascador-' . slugify($name);
+        } else {
+            $slug = slugify($name);
+        }
+    }
+
     $id = slugify($name);
-    // Verificar colisión de ID
-    $check = $db->prepare('SELECT id FROM products WHERE id = ?');
-    $check->execute([$id]);
+    // Verificar colisión de ID y Slug
+    $check = $db->prepare('SELECT id FROM products WHERE id = ? OR slug = ?');
+    $check->execute([$id, $slug]);
     if ($check->fetch()) {
         $id .= '-' . time();
+        $slug .= '-' . time();
     }
 
     $catalog_price = isset($input['catalog_price']) && is_numeric($input['catalog_price']) ? (int)$input['catalog_price'] : null;
@@ -157,15 +205,15 @@ if ($method === 'POST') {
     $page        = (int)($input['page'] ?? 99);
 
     $stmt = $db->prepare('
-        INSERT INTO products (id, sku, name, category, stage, catalog_price, price, dimensions, image, description, includes, is_render, is_pending, is_active, tags, page)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO products (id, sku, slug, name, category, stage, catalog_price, price, dimensions, image, description, includes, is_render, is_pending, is_active, tags, page)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ');
 
     $stmt->execute([
-        $id, $sku, $name, $category, $stage, $catalog_price, $price, $dimensions, $image, $description, $includes, $is_render, $is_pending, $is_active, $tags, $page
+        $id, $sku, $slug, $name, $category, $stage, $catalog_price, $price, $dimensions, $image, $description, $includes, $is_render, $is_pending, $is_active, $tags, $page
     ]);
 
-    json_response(['success' => true, 'id' => $id, 'sku' => $sku], 201);
+    json_response(['success' => true, 'id' => $id, 'sku' => $sku, 'slug' => $slug], 201);
 }
 
 // PUT: Actualizar producto
@@ -187,6 +235,7 @@ if ($method === 'PUT') {
     $name = isset($input['name']) ? trim($input['name']) : $current['name'];
     $category = isset($input['category']) ? trim($input['category']) : $current['category'];
     $sku = isset($input['sku']) ? trim($input['sku']) : $current['sku'];
+    $slug = isset($input['slug']) && !empty(trim($input['slug'])) ? slugify($input['slug']) : ($current['slug'] ?? slugify($name));
     $catalog_price = isset($input['catalog_price']) ? (int)$input['catalog_price'] : $current['catalog_price'];
 
     if (isset($input['price']) && is_numeric($input['price'])) {
@@ -211,14 +260,14 @@ if ($method === 'PUT') {
 
     $up = $db->prepare('
         UPDATE products
-        SET sku = ?, name = ?, category = ?, stage = ?, catalog_price = ?, price = ?,
+        SET sku = ?, slug = ?, name = ?, category = ?, stage = ?, catalog_price = ?, price = ?,
             dimensions = ?, image = ?, description = ?, includes = ?, is_render = ?, is_pending = ?,
             is_active = ?, tags = ?, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
     ');
 
     $up->execute([
-        $sku, $name, $category, $stage, $catalog_price, $price, $dimensions, $image, $description, $includes, $is_render, $is_pending, $is_active, $tags, $id
+        $sku, $slug, $name, $category, $stage, $catalog_price, $price, $dimensions, $image, $description, $includes, $is_render, $is_pending, $is_active, $tags, $id
     ]);
 
     json_response(['success' => true, 'id' => $id]);

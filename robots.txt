@@ -1,0 +1,20 @@
+# PEKES Pet Shop — Robots.txt
+# https://pekes.shop
+
+User-agent: *
+Allow: /
+Allow: /producto/
+Allow: /images/
+Allow: /assets/
+
+# Rutas privadas y administrativas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /*.sql$
+Disallow: /*.json$
+
+# Mapa del Sitio Oficial
+Sitemap: https://pekes.shop/sitemap.xml
+

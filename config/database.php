@@ -1,67 +1,59 @@
 <?php
 /**
- * PEKES Pet Shop — Configuración de Base de Datos
- * Compatible con MySQL / MariaDB (Hostinger) y SQLite local de respaldo.
+ * PEKES Pet Shop — Conexión a Base de Datos MySQL / MariaDB
+ * Optimizado para despliegue en Hostinger (hPanel / phpMyAdmin)
  */
 
-// Credenciales para Hostinger (completar con los datos creados en hPanel de Hostinger)
-define('DB_DRIVER',   'mysql'); // 'mysql' para Hostinger, 'sqlite' para desarrollo local sin MySQL
-define('DB_HOST',     'localhost');
-define('DB_NAME',     'pekes_db'); // Cambiar por el nombre de la BD en Hostinger (ej: u123456789_pekes)
-define('DB_USER',     'root');     // Cambiar por el usuario de la BD en Hostinger (ej: u123456789_pekesuser)
-define('DB_PASS',     '');         // Cambiar por la contraseña de la BD en Hostinger
-define('DB_CHARSET',  'utf8mb4');
-
-// Ruta al archivo SQLite original de respaldo local
-define('DB_SQLITE_PATH', dirname(__DIR__) . '/backend/pekes.db');
+// Credenciales de la base de datos MySQL en Hostinger
+// En Hostinger se crean en: hPanel -> Bases de datos -> Bases de datos MySQL
+define('DB_HOST',    'localhost');
+define('DB_NAME',    'pekes_db');       // Ejemplo en Hostinger: u123456789_pekes
+define('DB_USER',    'root');           // Ejemplo en Hostinger: u123456789_pekesuser
+define('DB_PASS',    '');               // Contraseña creada en Hostinger
+define('DB_CHARSET', 'utf8mb4');
 
 /**
- * Retorna la instancia singleton de la conexión PDO
- * @return PDO
+ * Retorna la instancia singleton de la conexión PDO a MySQL.
+ * Si falla, retorna null para permitir el funcionamiento del catálogo de respaldo (public/data/products.json).
+ * @param bool $die_on_error Si es true, detiene la ejecución mostrando mensaje de error (útil para el admin).
+ * @return PDO|null
  */
-function get_db_connection() {
+function get_db_connection($die_on_error = false) {
     static $pdo = null;
 
     if ($pdo !== null) {
         return $pdo;
     }
 
+    $dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', DB_HOST, DB_NAME, DB_CHARSET);
+
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
     ];
 
-    // Intento 1: Conectar a MySQL si el driver es mysql y hay base de datos configurada
-    if (DB_DRIVER === 'mysql' && !empty(DB_NAME)) {
-        try {
-            $dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', DB_HOST, DB_NAME, DB_CHARSET);
-            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-            return $pdo;
-        } catch (PDOException $e) {
-            // Si estamos en entorno local y MySQL no está activo, hacer fallback a SQLite para desarrollo
-            if (file_exists(DB_SQLITE_PATH)) {
-                try {
-                    $pdo = new PDO('sqlite:' . DB_SQLITE_PATH, null, null, $options);
-                    // Habilitar claves foráneas en SQLite
-                    $pdo->exec('PRAGMA foreign_keys = ON;');
-                    return $pdo;
-                } catch (PDOException $sqle) {
-                    die('Error al conectar a SQLite de respaldo: ' . htmlspecialchars($sqle->getMessage()));
-                }
-            } else {
-                die('Error de conexión a la base de datos MySQL: ' . htmlspecialchars($e->getMessage()));
-            }
-        }
-    }
-
-    // Intento 2: Conexión forzada a SQLite
-    if (file_exists(DB_SQLITE_PATH)) {
-        $pdo = new PDO('sqlite:' . DB_SQLITE_PATH, null, null, $options);
-        $pdo->exec('PRAGMA foreign_keys = ON;');
+    try {
+        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         return $pdo;
+    } catch (PDOException $e) {
+        if ($die_on_error) {
+            error_log('Error de conexión PDO MySQL: ' . $e->getMessage());
+            die('
+                <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 550px; margin: 80px auto; padding: 32px; background: #FFF5F5; border: 1px solid #FED7D7; border-radius: 16px; color: #742A2A; text-align: center;">
+                    <h2 style="margin-top: 0; color: #9B2C2C;">Configuración de Base de Datos Requerida</h2>
+                    <p style="font-size: 15px; line-height: 1.6; color: #4A5568;">
+                        No fue posible conectar con la base de datos MySQL. Por favor configura las credenciales de tu base de datos en <strong>config/database.php</strong> e importa el archivo <strong>database.sql</strong> en phpMyAdmin.
+                    </p>
+                    <code style="display: block; background: #fff; padding: 12px; border-radius: 8px; font-size: 13px; color: #2D3748; margin-top: 16px;">
+                        ' . htmlspecialchars($e->getMessage()) . '
+                    </code>
+                </div>
+            ');
+        }
+        return null;
     }
-
-    die('No se pudo establecer conexión a ninguna base de datos disponible.');
 }
+
 
