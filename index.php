@@ -20,6 +20,9 @@ $count_all = count($products);
 $count_piso = count(array_filter($products, fn($p) => $p['category'] === 'Gimnasios de piso'));
 $count_pared = count(array_filter($products, fn($p) => $p['category'] === 'Gimnasios de pared'));
 $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === 'Rascadores'));
+
+$css_version = file_exists(__DIR__ . '/assets/css/main.css') ? filemtime(__DIR__ . '/assets/css/main.css') : '2.3.0';
+$js_version  = file_exists(__DIR__ . '/assets/js/app.js') ? filemtime(__DIR__ . '/assets/js/app.js') : '2.3.0';
 ?>
 <!DOCTYPE html>
 <html lang="es-CO">
@@ -31,7 +34,7 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
   <meta name="description"
     content="Catálogo exclusivo de gimnasios de piso y pared para gatos en Cali. Diseños contemporáneos, bienestar y conexión. Consulta y compra directa vía WhatsApp." />
   <link rel="icon" type="image/png" href="/images/logos/mascota.png" />
-  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/main.css?v=<?php echo $css_version; ?>" />
 </head>
 
 <body>
@@ -595,10 +598,10 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
         <img src="/images/campaign/sofa_campana.jpg" alt="PEKES — Tu sofá es tuyo hasta que él decide lo contrario" loading="lazy" />
       </div>
       <div class="miacara-split-content">
-        <span class="miacara-kicker">Capítulo 01 · Hábitat en Armonía</span>
-        <h2 class="miacara-title">Tu sofá es tuyo... hasta que él decide lo contrario</h2>
+        <span class="miacara-kicker">Campaña Oficial PEKES · Hábitat en Armonía</span>
+        <h2 class="miacara-title">Espacios para convivir, no para competir por ellos</h2>
         <p class="miacara-text">
-          Convivir con un felino no significa renunciar a la belleza de tu mobiliario. En PEKES diseñamos gimnasios de suelo con postes robustos en cabuya 100% natural y plataformas acogedoras que satisfacen el estiramiento y rascado instintivo, preservando la tranquilidad de tu hogar en Cali.
+          Convivir con un felino no significa renunciar a la belleza de tu mobiliario. En PEKES diseñamos gimnasios de suelo con postes robustos en cabuya 100% natural y plataformas acogedoras que satisfacen el estiramiento y rascado instintivo, preservando la tranquilidad y estilo de tu hogar en Cali.
         </p>
         <div class="miacara-actions">
           <a href="#catalogo" class="btn-miacara-primary">Descubrir Gimnasios de Piso</a>
@@ -694,10 +697,10 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
   <section class="miacara-editorial-split reverse">
     <div class="container miacara-split-grid">
       <div class="miacara-split-content">
-        <span class="miacara-kicker">Capítulo 02 · Arquitectura Aérea</span>
-        <h2 class="miacara-title">Porque su mundo merece lo mejor</h2>
+        <span class="miacara-kicker">Campaña Oficial PEKES · Territorio Vertical</span>
+        <h2 class="miacara-title">La perspectiva que tu gato busca, con el diseño que mereces</h2>
         <p class="miacara-text">
-          Los gatos necesitan dominar las alturas para sentirse en paz. Nuestros circuitos aéreos de pared modulares, fabricados en triplex de pino de 12 mm con domos acrílicos panorámicos, transforman muros convencionales en piezas esculturales de bienestar felino e interiorismo contemporáneo.
+          Los gatos necesitan dominar las alturas para sentirse en paz y seguros. Nuestros circuitos aéreos de pared modulares, fabricados en triplex de pino de 12 mm con domos acrílicos panorámicos, transforman muros convencionales en piezas esculturales de bienestar felino e interiorismo contemporáneo en Cali.
         </p>
         <div class="miacara-actions">
           <a href="#catalogo" class="btn-miacara-primary">Explorar Combos de Pared</a>
@@ -1136,7 +1139,7 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
     window.PEKES_SITE_URL = 'https://www.pekes.shop';
   </script>
 
-  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/app.js?v=<?php echo $js_version; ?>"></script>
 </body>
 
 </html>

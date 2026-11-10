@@ -957,25 +957,27 @@ img {
 
 .card-img-container {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 5;
   background: #FBFBFA;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 0.85rem;
 }
 
 .card-img-container img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card:hover .card-img-container img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 /* Badges de tarjeta — Estilo MiaCara */
@@ -3436,21 +3438,25 @@ img {
   position: relative;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  background: var(--color-sand);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .miacara-split-media img {
   width: 100%;
   height: auto;
-  max-height: 560px;
-  object-fit: cover;
+  max-width: 480px;
+  object-fit: contain;
   display: block;
+  border-radius: var(--radius-2xl);
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .miacara-split-media:hover img {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .miacara-split-content {

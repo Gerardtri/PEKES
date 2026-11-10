@@ -134,7 +134,8 @@ $related_products = get_related_products($product['category'], $product['id'], 4
   <meta name="twitter:image" content="<?php echo e($product_image_abs); ?>" />
 
   <!-- Hojas de Estilo Oficiales PEKES -->
-  <link rel="stylesheet" href="/assets/css/main.css" />
+  <?php $css_v = file_exists(__DIR__ . '/assets/css/main.css') ? filemtime(__DIR__ . '/assets/css/main.css') : '2.3.0'; ?>
+  <link rel="stylesheet" href="/assets/css/main.css?v=<?php echo $css_v; ?>" />
 
   <!-- Datos Estructurados Schema.org: Product & BreadcrumbList -->
   <script type="application/ld+json">

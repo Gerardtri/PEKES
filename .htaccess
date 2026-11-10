@@ -2,12 +2,15 @@
 # PEKES Pet Shop — Configuración Apache / LiteSpeed para Hostinger Single
 # ==============================================================================
 
+# 0. Prioridad de Documento de Inicio (PHP Primero)
+DirectoryIndex index.php index.html
+
 # 1. Seguridad Básica
 Options -Indexes
 ServerSignature Off
 
 # 2. Bloqueo de Archivos Sensibles y Bases de Datos
-<FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sqlite|db|env|json|md|py|pyc)|~)$">
+<FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sqlite|db|env|md|py|pyc)|~)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -17,7 +20,7 @@ ServerSignature Off
     </IfModule>
 </FilesMatch>
 
-# Permitir archivos necesarios públicamente
+# Bloquear archivos de configuración específicos
 <Files "package.json">
     Require all denied
 </Files>
@@ -31,12 +34,30 @@ ServerSignature Off
     Require all denied
 </Files>
 
-# 3. Cabeceras de Seguridad HTTP
+# Permitir explícitamente el catálogo JSON público
+<Files "products.json">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
+</Files>
+
+# 3. Cabeceras de Seguridad y Control de Caché
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Evitar que el navegador almacene en caché permanente el HTML de la página
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
 </IfModule>
 
 # 4. Enrutamiento y URLs Amigables
