@@ -49,8 +49,8 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
       <nav class="main-nav" aria-label="Navegación principal">
         <a href="#test-michi" class="nav-link nav-highlight">Test Michi</a>
         <a href="#catalogo" class="nav-link active">Gimnasios</a>
-        <a href="#pilares" class="nav-link">Pilares</a>
-        <a href="#estilo-vida" class="nav-link">Estilo de Vida</a>
+        <a href="#bienestar" class="nav-link">Bienestar</a>
+        <a href="#comunidad" class="nav-link">Comunidad</a>
         <a href="#como-comprar" class="nav-link">Cómo Comprar</a>
       </nav>
 
@@ -100,8 +100,8 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
           <a href="#catalogo" class="btn-primary">
             Explorar Catálogo — <?php echo $count_all; ?> Referencias
           </a>
-          <a href="#estilo-vida" class="btn-secondary">
-            Ver en Espacios Reales
+          <a href="#comunidad" class="btn-secondary">
+            Hogares Reales en Cali
           </a>
         </div>
         <div class="hero-features">
@@ -414,72 +414,6 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
   </section>
 
   <!-- ==========================================================================
-       Pilares de Marca (Diseño, Bienestar, Conexión)
-       ========================================================================== -->
-  <section class="pillars-section" id="pilares">
-    <div class="container">
-      <div class="section-head">
-        <span class="section-tag">Nuestros Fundamentos</span>
-        <h2 class="section-title">Diseñados para convivir en equilibrio</h2>
-        <p class="section-desc">No somos una tienda de mascotas tradicional. Creamos objetos de estilo de vida para
-          enriquecer el hábitat de quienes comparten su cotidianidad con gatos.</p>
-      </div>
-
-      <div class="pillars-grid">
-        <!-- Pilar 1: Diseño -->
-        <div class="pillar-card">
-          <div class="pillar-icon-box">
-            <svg viewBox="0 0 24 24">
-              <rect x="3" y="3" width="7" height="7" rx="1"/>
-              <rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="14" y="14" width="7" height="7" rx="1"/>
-              <path d="M3 17.5h3.5m0 0V14H10v3.5m-3.5 0H10"/>
-            </svg>
-          </div>
-          <span class="pillar-title">01 — Diseño</span>
-          <p class="pillar-name">Estética y Función</p>
-          <p class="pillar-desc">
-            Líneas sobrias, triplex de pino de 12 mm y textiles en tonos neutros que dialogan con la arquitectura
-            interior contemporánea de tu hogar.
-          </p>
-        </div>
-        <!-- Pilar 2: Bienestar -->
-        <div class="pillar-card">
-          <div class="pillar-icon-box">
-            <svg viewBox="0 0 24 24">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </div>
-          <span class="pillar-title">02 — Bienestar</span>
-          <p class="pillar-name">Hábitat Enriquecido</p>
-          <p class="pillar-desc">
-            Alturas estratégicas, postes de cabuya para estiramiento muscular y cápsulas panorámicas que satisfacen la
-            necesidad instintiva de vigilar en calma.
-          </p>
-        </div>
-        <!-- Pilar 3: Conexión -->
-        <div class="pillar-card">
-          <div class="pillar-icon-box">
-            <svg viewBox="0 0 24 24">
-              <circle cx="18" cy="5" r="3"/>
-              <circle cx="6" cy="12" r="3"/>
-              <circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
-          </div>
-          <span class="pillar-title">03 — Conexión</span>
-          <p class="pillar-name">Vínculo Cotidiano</p>
-          <p class="pillar-desc">
-            Espacios compartidos donde tu gato descansa cerca de ti mientras trabajas o descansas, fortaleciendo el
-            vínculo diario.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
        El Test Michi — Recomendador Interactivo
        ========================================================================== -->
   <section class="michi-quiz-section" id="test-michi">
@@ -772,56 +706,6 @@ $count_rascadores = count(array_filter($products, fn($p) => $p['category'] === '
       </div>
       <div class="miacara-split-media">
         <img src="/images/campaign/mundo_campana.jpg" alt="PEKES — Porque su mundo merece lo mejor" loading="lazy" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================================================
-       Bloque de Estilo de Vida en Espacios Reales
-       ========================================================================== -->
-  <section class="lifestyle-section" id="estilo-vida">
-    <div class="container">
-      <div class="section-head">
-        <span class="section-tag">Vida en Casa</span>
-        <h2 class="section-title">Gimnasios en Ambientes Reales</h2>
-        <p class="section-desc">Comprueba cómo nuestros gimnasios de piso y combos modulares de pared se integran en
-          patios, salas y dormitorios en Cali.</p>
-      </div>
-
-      <div class="lifestyle-grid">
-        <div class="lifestyle-card">
-          <div class="lifestyle-img">
-            <img src="/images/products/P11_ZAFIRO.jpeg" alt="Gimnasio Zafiro con gato descansando en la cesta" />
-          </div>
-          <div class="lifestyle-content">
-            <span class="lifestyle-label">Gimnasio de Piso</span>
-            <h4>ZAFIRO — Confort y Descanso</h4>
-            <p>Cesta acolchada en forma de nido circular para siestas prolongadas en cualquier rincón luminoso.</p>
-          </div>
-        </div>
-
-        <div class="lifestyle-card">
-          <div class="lifestyle-img">
-            <img src="/images/products/P46_Combo_1.jpeg"
-              alt="Combo 1 de pared instalado en pared de ladrillo rústico" />
-          </div>
-          <div class="lifestyle-content">
-            <span class="lifestyle-label">Combo de Pared</span>
-            <h4>Combo #1 — Pared Modular en Ladrillo</h4>
-            <p>Circuito aéreo vertical con domo de observación acrílico y repisas en L para dinamismo felino.</p>
-          </div>
-        </div>
-
-        <div class="lifestyle-card">
-          <div class="lifestyle-img">
-            <img src="/images/products/P66_Combo_21.jpeg" alt="Combo 21 de pared instalado en esquina de habitación" />
-          </div>
-          <div class="lifestyle-content">
-            <span class="lifestyle-label">Combo de Pared</span>
-            <h4>Combo #21 — Integración en Esquina</h4>
-            <p>Aprovechamiento tridimensional de esquinas con comedero elevado y casita domo superior.</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
