@@ -28,6 +28,14 @@ $js_version  = file_exists(__DIR__ . '/assets/js/app.js') ? filemtime(__DIR__ . 
 <html lang="es-CO">
 
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PW7VGGHP');</script>
+  <!-- End Google Tag Manager -->
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PEKES — Para la vida que comparten | Gimnasios y Catálogo Felino Cali</title>
@@ -38,6 +46,10 @@ $js_version  = file_exists(__DIR__ . '/assets/js/app.js') ? filemtime(__DIR__ . 
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PW7VGGHP"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- ==========================================================================
        Encabezado y Navegación
@@ -605,7 +617,7 @@ $js_version  = file_exists(__DIR__ . '/assets/js/app.js') ? filemtime(__DIR__ . 
         </p>
         <div class="miacara-actions">
           <a href="#catalogo" class="btn-miacara-primary">Descubrir Gimnasios de Piso</a>
-          <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me gustaría recibir asesoría sobre qué gimnasio de piso se adapta mejor a los espacios de mi casa en Cali.'); ?>" target="_blank" rel="noopener" class="btn-miacara-ghost">Asesoría por WhatsApp &rarr;</a>
+          <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me gustaría recibir asesoría sobre qué gimnasio de piso se adapta mejor a los espacios de mi casa en Cali.'); ?>" target="_blank" rel="noopener" class="btn-miacara-ghost" id="banner-wa-sofa">Asesoría por WhatsApp &rarr;</a>
         </div>
       </div>
     </div>
@@ -704,7 +716,7 @@ $js_version  = file_exists(__DIR__ . '/assets/js/app.js') ? filemtime(__DIR__ . 
         </p>
         <div class="miacara-actions">
           <a href="#catalogo" class="btn-miacara-primary">Explorar Combos de Pared</a>
-          <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa conocer las opciones de circuitos aéreos de pared para instalar en mi apartamento en Cali.'); ?>" target="_blank" rel="noopener" class="btn-miacara-ghost">Consultar Instalación en Cali &rarr;</a>
+          <a href="https://wa.me/<?php echo e($wa_number); ?>?text=<?php echo rawurlencode('¡Hola PEKES! Me interesa conocer las opciones de circuitos aéreos de pared para instalar en mi apartamento en Cali.'); ?>" target="_blank" rel="noopener" class="btn-miacara-ghost" id="banner-wa-mundo">Consultar Instalación en Cali &rarr;</a>
         </div>
       </div>
       <div class="miacara-split-media">

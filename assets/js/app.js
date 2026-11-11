@@ -66,21 +66,26 @@ ${questionText}`;
   };
 }
 
-// Analytics Trigger
+// Analytics Trigger — Google Tag Manager dataLayer
 function trackWhatsAppClick(product, location = 'product_modal') {
-  const isPending = state.isPrecioPendienteSimulated;
+  window.dataLayer = window.dataLayer || [];
+
+  const priceNum = (product && product.price && !isNaN(product.price)) ? Number(product.price) : 0;
   const payload = {
-    event: 'click_whatsapp',
-    location: location,
-    product_name: product ? product.name : 'Consulta General',
-    sku: product ? product.sku : 'N/A',
-    price: (!isPending && product) ? product.price : '',
-    category: product ? product.category : 'General',
+    event: 'whatsapp_click',
+    product_name: product ? (product.name || 'Consulta General') : 'Consulta General',
+    product_category: product ? (product.category || 'General') : 'General',
+    product_id: product ? (product.sku || product.id || 'N/A') : 'N/A',
+    button_location: location,
+    destination: 'whatsapp',
+    value: 1.0,
+    currency: 'COP',
+    product_price: priceNum,
     page: window.location.pathname
   };
 
-  console.log('[PEKES Analytics] Triggered click_whatsapp:', payload);
-  showToast('Evento "click_whatsapp" emitido hacia GA4 & Meta Pixel', payload);
+  window.dataLayer.push(payload);
+  console.log('[PEKES GTM] dataLayer.push(whatsapp_click):', payload);
 
   window.dispatchEvent(new CustomEvent('pekes:click_whatsapp', { detail: payload }));
 }
@@ -251,6 +256,22 @@ function openProductModal(product) {
       trackWhatsAppClick(product, 'product_modal');
     };
   }
+
+  // GA4 Ecommerce view_item
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'view_item',
+    ecommerce: {
+      currency: 'COP',
+      value: Number(product.price) || 0,
+      items: [{
+        item_id: product.sku || product.id,
+        item_name: product.name,
+        item_category: product.category,
+        price: Number(product.price) || 0
+      }]
+    }
+  });
 
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -649,7 +670,7 @@ function initEvents() {
         const card = waBtn.closest('.product-card');
         const id = card?.getAttribute('data-id');
         const prod = state.products.find(p => p.id === id);
-        trackWhatsAppClick(prod, 'catalog_card');
+        trackWhatsAppClick(prod, 'product_card');
         return;
       }
 
@@ -661,6 +682,19 @@ function initEvents() {
         const slug = card.getAttribute('data-slug');
         const prod = state.products.find(p => p.id === id || (slug && (p.slug === slug || getProductSlug(p) === slug)));
         if (prod) {
+          // GA4 select_item
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'select_item',
+            ecommerce: {
+              items: [{
+                item_id: prod.sku || prod.id,
+                item_name: prod.name,
+                item_category: prod.category,
+                price: Number(prod.price) || 0
+              }]
+            }
+          });
           openProductModal(prod);
         }
       }
@@ -727,6 +761,15 @@ function initEvents() {
   // Floating WhatsApp action
   document.getElementById('floating-wa-btn')?.addEventListener('click', () => {
     trackWhatsAppClick(null, 'floating_button');
+  });
+
+  // Editorial campaigns WhatsApp actions
+  document.getElementById('banner-wa-sofa')?.addEventListener('click', () => {
+    trackWhatsAppClick(null, 'editorial_banner_1');
+  });
+
+  document.getElementById('banner-wa-mundo')?.addEventListener('click', () => {
+    trackWhatsAppClick(null, 'editorial_banner_2');
   });
 
   // Sticky header shadow

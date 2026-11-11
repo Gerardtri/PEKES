@@ -101,6 +101,14 @@ $related_products = get_related_products($product['category'], $product['id'], 4
 <html lang="es-CO">
 
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PW7VGGHP');</script>
+  <!-- End Google Tag Manager -->
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -202,6 +210,10 @@ $related_products = get_related_products($product['category'], $product['id'], 4
 </head>
 
 <body class="pdp-body">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PW7VGGHP"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- ==========================================================================
        Encabezado Principal
@@ -499,6 +511,58 @@ $related_products = get_related_products($product['category'], $product['id'], 4
       <div>https://pekes.shop · Comercio digital directo sin pasarela de pago.</div>
     </div>
   </footer>
+
+  <!-- ==========================================================================
+       Google Tag Manager & GA4 DataLayer Events
+       ========================================================================== -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    // 1. GA4 Ecommerce: view_item
+    window.dataLayer.push({
+      event: 'view_item',
+      ecommerce: {
+        currency: 'COP',
+        value: <?php echo $product_price_num; ?>,
+        items: [{
+          item_id: <?php echo json_encode($product_sku, JSON_UNESCAPED_UNICODE); ?>,
+          item_name: <?php echo json_encode($product_name, JSON_UNESCAPED_UNICODE); ?>,
+          item_category: <?php echo json_encode($product_cat, JSON_UNESCAPED_UNICODE); ?>,
+          price: <?php echo $product_price_num; ?>
+        }]
+      }
+    });
+
+    // 2. Función de seguimiento para clics en WhatsApp
+    function trackPdpWhatsAppClick(location) {
+      window.dataLayer = window.dataLayer || [];
+      const payload = {
+        event: 'whatsapp_click',
+        product_name: <?php echo json_encode($product_name, JSON_UNESCAPED_UNICODE); ?>,
+        product_category: <?php echo json_encode($product_cat, JSON_UNESCAPED_UNICODE); ?>,
+        product_id: <?php echo json_encode($product_sku, JSON_UNESCAPED_UNICODE); ?>,
+        button_location: location,
+        destination: 'whatsapp',
+        value: 1.0,
+        currency: 'COP',
+        product_price: <?php echo $product_price_num; ?>,
+        page: window.location.pathname
+      };
+
+      window.dataLayer.push(payload);
+      console.log('[PEKES GTM] dataLayer.push(whatsapp_click):', payload);
+    }
+
+    // Botón Principal de WhatsApp en PDP
+    document.querySelector('.btn-pdp-wa')?.addEventListener('click', function() {
+      trackPdpWhatsAppClick('pdp_cta');
+    });
+
+    // Botón de WhatsApp en la Cabecera
+    document.querySelector('.btn-wa-header')?.addEventListener('click', function() {
+      trackPdpWhatsAppClick('header_button');
+    });
+  </script>
 
 </body>
 </html>
