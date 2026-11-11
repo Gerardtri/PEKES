@@ -28,6 +28,18 @@ $js_version  = file_exists(__DIR__ . '/assets/js/app.js') ? filemtime(__DIR__ . 
 <html lang="es-CO">
 
 <head>
+  <!-- Google Consent Mode v2 (Default: Granted para Colombia) -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  </script>
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
